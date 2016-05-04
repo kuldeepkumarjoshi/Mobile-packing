@@ -18,7 +18,7 @@ angular.module('woocommerce-api.controllers', [])
 })
 
 // Home Controller
-.controller('HomeCtrl', function($scope, Data, UserData, MetaData) {
+.controller('HomeCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
 
     $scope.items = Data.items;
 
@@ -29,6 +29,72 @@ angular.module('woocommerce-api.controllers', [])
             $scope.index = result;
         }
     );
+
+    CategoriesData.async().then(
+        // successCallback
+        function() {
+            var cats = CategoriesData.getAll();
+            console.log(cats)
+                // Create layered categories/sub-categories view
+            var parents = [];
+
+            angular.forEach(cats, function(cat, key) {
+
+                // Has no parent itself
+                if (cat.parent == 0) {
+                    parents[cat.id] = cat;
+                    // list which contains subcategories
+                    parents[cat.id].children = [];
+
+                }
+                // Or there are categories that consider it a parent
+                else if (parents[cat.parent] == undefined) {
+                    parents[cat.parent] = {
+                        children: []
+                    };
+                }
+
+            });
+
+            // Add children
+            angular.forEach(cats, function(cat, key) {
+                if (cat.parent != 0) {
+                    parents[cat.parent].children.push(cat);
+
+                    // If was initialized, consider it a parent
+                    if (parents[cat.id] != undefined)
+                        for (var attr in cat)
+                            parents[cat.id][attr] = cat[attr];
+                }
+            });
+
+            // Fix indices to be 0-based instead of id based
+            $scope.categories = parents.filter(function() {
+                return true;
+            });
+
+            $rootScope.$broadcast('loading:hide');
+
+        },
+        // errorCallback
+        function() {
+            $rootScope.$broadcast('loading:hide');
+            console.warn("Was unable to fetch categories data from the API.");
+        }
+    );
+
+    $scope.getPercentageValue = function(value, total) {
+        return value * 100 / total;
+    }
+
+    $scope.options = {
+        scaleColor: false,
+        lineWidth: 10,
+        lineCap: 'square',
+        barColor: '#9b5c8f',
+        size: 100,
+        animate: 500
+    };
 
 })
 

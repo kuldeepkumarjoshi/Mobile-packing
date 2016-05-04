@@ -87,7 +87,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
         url: "/home",
         views: {
             'menuContent': {
-                templateUrl: "templates/home-grid-2.html",
+                templateUrl: "templates/home-page.html",
                 controller: 'HomeCtrl'
             }
         }
