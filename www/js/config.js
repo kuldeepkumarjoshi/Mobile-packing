@@ -2,7 +2,7 @@ angular.module("woocommerce-api").constant("CONFIG", {
 
     // The url of your domain, both HTTP and HTTPS are supported.
     //site_url: 'http://localhost',
-    site_url: 'http://packnation-test.goldenpotli.com',//'http://mobile-apps.today/products/ionic/woocommerce-api',
+    site_url:'http://packnation-test.goldenpotli.com',//'http://packnation.in',// 'http://packnation-test.goldenpotli.com',
 
     // Max period of time to wait for reply from the server, defined in milliseconds.
     request_timeout: 6000,
@@ -12,8 +12,8 @@ angular.module("woocommerce-api").constant("CONFIG", {
 
     // Pair of credentials from your woocommerce installation, please refer to the documentation.
     // Apps today
-    wc_consumer_key: 'ck_c2067bb22f8163849bb71faedfccff83b4cd5394',//'ck_5f886e3d5c14cb0280167e5c96615e59a07b2124',
-    wc_consumer_secret: 'cs_03525c2eab4492f415bf6e2456bdaeeac199d77e',//'cs_4a5d2c133acc4203d45b410cf830f2755bf3257e',
+    wc_consumer_key: 'ck_c2067bb22f8163849bb71faedfccff83b4cd5394',
+    wc_consumer_secret: 'cs_03525c2eab4492f415bf6e2456bdaeeac199d77e',
 
     // The number of products to be fetched with each API call.
     products_per_page: 6,

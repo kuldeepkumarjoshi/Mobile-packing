@@ -30,6 +30,8 @@ angular.module('woocommerce-api.controllers', [])
         }
     );
 
+    $rootScope.$broadcast('loading:show');
+
     CategoriesData.async().then(
         // successCallback
         function() {
@@ -95,6 +97,7 @@ angular.module('woocommerce-api.controllers', [])
         size: 100,
         animate: 500
     };
+
 
 })
 

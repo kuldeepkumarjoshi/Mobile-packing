@@ -15,11 +15,11 @@
             </div>
         </div>
 
-        <div class='row' ng-repeat="row in categories | partition:1">
-            <div class="card col item" ng-repeat="category in row">
+        <div class='col col-50' ng-repeat="row in categories | partition:1">
+            <div class="card item" ng-repeat="category in row">
 
                 <!-- Parent -->
-                <div class='item item-divider'>
+                <div class='item item-divider' style="background-image:{{category.image}}">
                     <a class="text-center category-title" href=" #/app/categories/{{category.slug}}/{{category.name}}">
                         <div class='h3'>{{category.name}} - <b>{{category.count}}</b></div>
                     </a>
@@ -29,18 +29,7 @@
                 </div>
 
                 <!-- Sub-categories -->
-                <div ng-if="category.children.length > 0">
 
-                    <ul class="list">
-                        <li class="item" ng-repeat="c in category.children">
-                            <a class="text-wrap category-title" href="#/app/categories/{{c.slug}}/{{c.name}}">
-                                <div easypiechart class="chart" options="options" percent="getPercentageValue(c.count, category.count)"></div>
-                                <h2 class="text-center">{{c.name}} - <b>{{c.count}}</b></h2>
-                            </a>
-                        </li>
-                    </ul>
-
-                </div>
             </div>
         </div>
 
