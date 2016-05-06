@@ -1,3 +1,12 @@
+<style>
+.categoryBox{
+    background-size: contain;
+        background-repeat: no-repeat;
+  height: 150px;
+}
+
+
+</style>
 <ion-view title="{{index.name}}">
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
@@ -14,24 +23,31 @@
                   </a>
             </div>
         </div>
+          <div class="row" ng-init="count=0"  ng-repeat="row in categories | partition:2">
+                  <!-- Parent -->
+                  <div  class="card col"  ng-repeat="category in row">
 
-        <div class='col col-50' ng-repeat="row in categories | partition:1">
-            <div class="card item" ng-repeat="category in row">
 
-                <!-- Parent -->
-                <div class='item item-divider' style="background-image:{{category.image}}">
-                    <a class="text-center category-title" href=" #/app/categories/{{category.slug}}/{{category.name}}">
-                        <div class='h3'>{{category.name}} - <b>{{category.count}}</b></div>
-                    </a>
+                  <div class="card-content categoryBox" style="background-image:url({{category.image}});" ng-click="moveToCategory(category)">
 
-                    <div class='item-text-wrap' ng-bind-html="category.description"></div>
+                      <div class="card-bg-image"></div>
+                      <a class="product-title  text-center "  href=" #/app/categories/{{category.slug}}/{{category.name}}">
 
-                </div>
 
-                <!-- Sub-categories -->
+                          <h4>{{category.name}} </h4>
+
+                      </a>
+
+                      <div ng-if="category.description" class="text-right product-price">
+                          <i class="icon ion-pricetag"></i>
+                          <div class='item-text-wrap' ng-bind-html="category.description"></div>
+                      </div>
+                  </div>
+
+                  </div>
 
             </div>
-        </div>
+
 
 
 
