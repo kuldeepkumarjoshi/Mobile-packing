@@ -17,10 +17,22 @@ angular.module('woocommerce-api.controllers', [])
 
 })
 .controller('SubcategoriesCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
-  
+  $scope.isEmptyData = true;
+    $scope.categories = [];
+$rootScope.$broadcast('loading:show');
+  if($rootScope.cat != null){
+    $scope.isEmptyData = false;
+      $scope.categories.push($rootScope.cat);
+  }
+$rootScope.$broadcast('loading:hide');
+
+$scope.getPercentageValue = function(value, total) {
+    return value * 100 / total;
+}
+
 })
 // Home Controller
-.controller('HomeCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
+.controller('HomeCtrl', function($scope,$state, $rootScope, Data, UserData, MetaData,CategoriesData) {
 
     $scope.items = Data.items;
 
@@ -32,6 +44,10 @@ angular.module('woocommerce-api.controllers', [])
         }
     );
 
+    $scope.moveToCategory = function(cat){
+      $rootScope.cat = cat;
+      $state.go('app.subcategory');
+    };
     $rootScope.$broadcast('loading:show');
 
     CategoriesData.async().then(

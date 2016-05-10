@@ -122,7 +122,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
-
+    .state('app.subcategory', {
+        url: "/subcategory",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/subcategory.html",
+                controller: 'SubcategoriesCtrl'
+            }
+        }
+    })
     .state('app.category', {
         url: "/categories/:category_slug/:category_name",
         views: {

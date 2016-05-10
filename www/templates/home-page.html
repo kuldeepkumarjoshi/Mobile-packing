@@ -1,8 +1,10 @@
 <style>
 .categoryBox{
     background-size: contain;
-        background-repeat: no-repeat;
-  height: 150px;
+    background-repeat: no-repeat;
+    height: 150px;
+    cursor: pointer;
+    padding-top: 72%;
 }
 
 
@@ -31,7 +33,7 @@
                   <div class="card-content categoryBox" style="background-image:url({{category.image}});" ng-click="moveToCategory(category)">
 
                       <div class="card-bg-image"></div>
-                      <a class="product-title  text-center "  href=" #/app/categories/{{category.slug}}/{{category.name}}">
+                      <a class="product-title  text-center ">
 
 
                           <h4>{{category.name}} </h4>
