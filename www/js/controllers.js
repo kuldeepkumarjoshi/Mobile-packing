@@ -16,7 +16,9 @@ angular.module('woocommerce-api.controllers', [])
     });
 
 })
-
+.controller('SubcategoriesCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
+  
+})
 // Home Controller
 .controller('HomeCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
 
