@@ -1,0 +1,39 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "com.paypal.cordova.mobilesdk": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        }
+    },
+    "dependent_plugins": {}
+}
