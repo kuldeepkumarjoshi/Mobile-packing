@@ -1,5 +1,5 @@
 <ion-view>
-    <ion-nav-title>{{title}}</ion-nav-title> 
+    <ion-nav-title>{{title}}</ion-nav-title>
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
@@ -13,10 +13,10 @@
 
                     <div class="card-bg-image"></div>
                     <a class="product-title  text-center" ng-href="#/app/products/{{product.id}}">
-                        
+
                         <img ng-if="product.images[0].src" ng-src="{{product.images[0].src}}" />
                         <h3>{{product.title}}</h3>
-                        
+
                     </a>
 
                     <div ng-if="product.price_html" class="text-right product-price">
