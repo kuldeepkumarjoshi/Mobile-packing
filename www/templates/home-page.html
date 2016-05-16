@@ -1,8 +1,8 @@
 <style>
 .categoryBox{
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
-    height: 150px;
+    /*height: 150px;*/
     cursor: pointer;
     padding-top: 72%;
 }
@@ -33,12 +33,12 @@
                   <div class="card-content categoryBox" style="background-image:url(../images/{{category.slug}}.png);" ng-click="moveToCategory(category)">
 
                       <div class="card-bg-image"></div>
-                      <a class="product-title  text-center ">
+                      <div class="product-title  text-center " style="  background-color: wheat;">
 
 
-                          <h4>{{category.name}} </h4>
+                          <h4 style="color: black;">{{category.name}} </h4>
 
-                      </a>
+                      </div>
 
                       <div ng-if="category.description" class="text-right product-price">
                           <i class="icon ion-pricetag"></i>
