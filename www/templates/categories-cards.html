@@ -1,0 +1,34 @@
+<ion-view title="Categories">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+
+        <div ng-repeat="row in categories | partition:1">
+            <div class="list card" ng-repeat="category in row">
+
+              <div ui-sref="app.category({category_slug: category.slug, category_name: category.name})" class="item item-avatar">
+                <img ng-if="category.image" src="{{category.image}}" />
+                <img ng-if="!category.image" src="images/woo-ninja.png" />
+                <h2 class="category-parent">{{category.name}}</h2>
+                <p ng-if="category.description" class='item-text-wrap' ng-bind-html="category.description"></p>
+                <p><ng-pluralize count="category.count" when="{'1': '1 item', 'other': '{} items'}"></ng-pluralize></p>
+              </div>
+
+             <div ui-sref="app.category({category_slug: c.slug, category_name: c.name})" class="item" ng-repeat="c in category.children">
+                <h2>{{c.name}}</h2>
+                <img class="full-image" ng-if="c.image" ng-src="{{c.image}}" />
+                <p ng-if="c.description" class='item-text-wrap' ng-bind-html="c.description"></p>
+                <p>
+                <ng-pluralize count="c.count" when="{'1': '1 item', 'other': '{} items'}"></ng-pluralize>
+                </p>
+              </div>
+
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view

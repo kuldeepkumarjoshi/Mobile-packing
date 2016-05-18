@@ -11,10 +11,20 @@ angular.module('woocommerce-api.data', [])
         note: 'Our Products',
         url: '#/app/products'
     }, {
+        title: 'Categories (Cards)',
+        icon: 'ion-bag',
+        note: 'Our Product Categories',
+        url: '#/app/categories-cards'
+    }, {
         title: 'Categories',
         icon: 'ion-bag',
         note: 'Our Product Categories',
         url: '#/app/categories'
+    }, {
+        title: 'New Customer',
+        icon: 'ion-person-add',
+        note: 'Register',
+        url: '#/app/newCustomer'
     }];
 
     return data;
@@ -32,6 +42,10 @@ angular.module('woocommerce-api.data', [])
         icon: 'ion-tshirt',
         url: '#/app/products'
     }, {
+        title: 'Categories (Cards)',
+        icon: 'ion-bag',
+        url: '#/app/categories-cards'
+    }, {
         title: 'Categories',
         icon: 'ion-bag',
         url: '#/app/categories'
@@ -43,6 +57,26 @@ angular.module('woocommerce-api.data', [])
         title: 'About',
         icon: 'ion-grid',
         url: '#/app/about'
+    }];
+
+    return data;
+})
+
+.factory('SocialData', function() {
+    var data = {};
+
+    data.items = [{
+        title: 'Facebook',
+        icon: 'ion-social-facebook',
+        url: 'https://www.facebook.com/'
+    }, {
+        title: 'Twitter',
+        icon: 'ion-social-twitter',
+        url: 'https://twitter.com/'
+    }, {
+        title: 'Instagram',
+        icon: 'ion-social-instagram',
+        url: 'https://www.instagram.com/'
     }];
 
     return data;
@@ -390,6 +424,7 @@ angular.module('woocommerce-api.data', [])
 .factory("UserData", function($http, $q, CONFIG) {
     var service = {};
     var user_data = null;
+    var orders = [];
 
     service.check = function(email) {
         var deferred = $q.defer();
@@ -448,8 +483,40 @@ angular.module('woocommerce-api.data', [])
 
     };
 
+    // Get Customer Orders
+    service.getOrdersAsync = function(customer_id) {
+        var deferred = $q.defer();
+        var params = {};
+
+        var url = generateQuery('GET', '/customers/' + customer_id + '/orders', CONFIG, params);
+
+        $http({
+            method: 'GET',
+            url: url,
+            timeout: CONFIG.request_timeout
+        }).then(
+            function(result) {
+                orders = result.data;
+                deferred.resolve(result);
+
+            },
+            function(result) {
+                deferred.reject(result);
+            }
+        );
+
+        return deferred.promise;
+
+    };
+
+    service.getOrders = function() {
+        return orders;
+    };
+
     return service;
 })
+
+
 
 /**
     Alternative implementation for paypal payments, incomplete.

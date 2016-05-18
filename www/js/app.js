@@ -131,6 +131,17 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
+	.state('app.categories-cards', {
+
+        url: "/categories-cards",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/categories-cards.html",
+
+                controller: 'CategoriesCtrl'
+            }
+        }
+    })
     .state('app.category', {
         url: "/categories/:category_slug/:category_name",
         views: {
@@ -170,6 +181,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
         }
     })
 
+	.state('app.orders', {
+        url: "/orders/:customer_id",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/orders.html",
+                controller: 'OrdersCtrl'
+            }
+        }
+    })
     .state('app.about', {
         url: "/about",
         views: {

@@ -11,9 +11,12 @@
             <div class="item-text-wrap text-center">
                 <div class="text-center">
                     <img src="images/woocommerce-logo.png" class="banner"/>
-                    <p>{{index.description}}<br/>{{index.URL}}</p>
                 </div>
             </div>
+        </div>
+
+        <div class="item item-divider">
+            {{index.description}}
         </div>
 
         <div ng-repeat="row in items | partition:2" class="row">
@@ -28,15 +31,21 @@
 
         </div>
 
-        <div class="row">
+        <div class="list" ng-controller="SocialCtrl">
 
-            <div class="card col home text-center">
-                <a class="item item-text-wrap" ui-sref="app.newCustomer">
-                    <h1><i class="icon ion-person-add"></i></h1>
-                    <h2>New Customer</h2>
-                    <span class="item-note ">Register</span>
-                </a>
+            <div class="item item-divider">
+                Social Profiles
             </div>
+
+            <a class="item item-icon-left" ng-click="openLink(index.URL)">
+                <i class="icon ion-bag"></i>
+                Our Store
+            </a>
+
+            <a ng-repeat="social in socialItems" class="item item-icon-left" ng-click="openLink(social.url)">
+                <i class="icon {{social.icon}}"></i>
+                {{social.title}}
+            </a>
 
         </div>
 

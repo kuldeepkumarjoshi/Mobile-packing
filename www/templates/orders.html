@@ -1,0 +1,25 @@
+<ion-view title="Orders">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+
+	<div ng-repeat="order in orders.orders" class="list card">
+
+		<div class="item">
+		<h2>{{order.id}} - <span style="text-transform: uppercase; font-weight:bold;">{{order.status}}</span></h2>
+		<p>{{order.created_at | date}}</p>
+		</div>
+
+		<div class="item item-body">
+			<div>{{order.total}} {{order.currency}}</div>
+			<div>{{order.payment_details.method_title}} <i ng-if="order.payment_details.paid" class="ion-checkmark"></i><i ng-if="!order.payment_details.paid" class="ion-close"></i></div>
+		</div>
+
+	</div>
+
+    </ion-content>
+</ion-view>
