@@ -15,7 +15,7 @@
             </button>
         </div>
     </ion-nav-buttons>
-    
+
 
     <ion-content class="has-header">
         <div class="list card">
@@ -42,25 +42,39 @@
                     </div>
                 </div>
             </div>
-            <div class="item">
-                <label class="item item-input">
-                    <span class="input-label">Quantity:</span>
-                    <form name="quantityForm" style="width:100%">
-                    <input class='text-right' name="quantity" type="number" min="1" max="{{product.stock_quantity}}" ng-model='quantity.value' required>
+            <div class="item" style="padding:0px;">
+                <div class="row">
+                    <div class="col" style="padding-top:6%;">Quantity:</div>
+
+                    <div class="row">
+                        <div class="col" style="    margin-left: 29%;">
+                          <button ng-hide="quantity.value == minQuantity" class="button icon ion-arrow-left-b" ng-click="stepDown()"></button>
+                        </div>
+                        <div class="col">  <span style="float:right;" class="input-label">{{quantity.value}}</span> </div>
+                        <div class="col">
+                          <button ng-hide="quantity.value == maxQuantity" class="button icon ion-arrow-right-b" ng-click="stepUp()"></button>
+                        </div>
+                   </div>
+
+                     <form ng-show="false" name="quantityForm" style="width:100%">
+                    <input class='text-right' name="quantity" type="number" min="1" max="{{product.stock_quantity}}" ng-model='quantity.value' required >
                     </form>
-                </label>
-                <label style="padding:15px 0 0 15px; display:inline-block;" ng-if="product.stock_quantity">
-                    <span>Stock Quantity: <b>{{product.stock_quantity}}</b></span>
-                </label>
-                
-                <div>
+                </div>
+
+
+                <!-- <div>
                     <label class="item item-input item-select" ng-repeat="attr in product.attributes">
                         <span class="input-label">{{attr.name}}:</span>
                         <select ng-model="attr.position">
                                 <option ng-repeat="option in attr.options" value="{{$index}}" selected="{{($index) != attr.position}}" >{{option}}</option>
                         </select>
                     </label>
-                </div>
+                </div> -->
+            </div>
+            <div class="item">
+              <div style=" display:inline-block;" ng-if="product.stock_quantity">
+                  <span>Stock Quantity: <b>{{product.stock_quantity}}</b></span>
+              </div>
             </div>
             <div class="item item-divider ">
                 <div class='row'>
@@ -95,7 +109,7 @@
                 <ion-infinite-scroll ng-if="hasMoreReviews()" on-infinite="loadMoreReviews()" distance="10%">
                 </ion-infinite-scroll>
             </div>
-            
+
         </div>
     </ion-content>
 </ion-view>

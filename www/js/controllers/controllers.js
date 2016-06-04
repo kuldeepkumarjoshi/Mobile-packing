@@ -111,7 +111,7 @@ angular.module('woocommerce-api.controllers', [])
     $scope.title = 'Products';
     $scope.products = [];
     $scope.productPage = 0;
-    ProductsData.clear();
+
 
     $scope.hasMoreProducts = function() {
         return (ProductsData.hasMore() || $scope.productPage == 0);
@@ -150,15 +150,40 @@ angular.module('woocommerce-api.controllers', [])
 .controller('ProductCtrl', function($rootScope, $scope, $stateParams, $ionicSlideBoxDelegate, ProductsData, BasketData, ReviewsData, CategoriesData) {
 
     $rootScope.$broadcast('loading:show');
+    var stepValue = 1;
+    $scope.minQuantity = 1;
+    $scope.maxQuantity = 100;
+    $scope.quantity ={};
+    ProductsData.clear();
 
+    $scope.stepUp = function(){
+      if(  $scope.quantity+stepValue > $scope.maxQuantity){
+          $scope.quantity.value = $scope.maxQuantity;
+      }else{
+          $scope.quantity.value += stepValue;
+      }
+    }
+    $scope.stepDown = function(){
+      if(  $scope.quantity-stepValue < $scope.minQuantity){
+          $scope.quantity.value = $scope.minQuantity;
+      }else{
+          $scope.quantity.value -= stepValue;
+      }
+    }
+    function initiateQuantity(category){
+      stepValue = category.stepValue;
+      $scope.minQuantity = category.minQuantity;
+      $scope.maxQuantity = $scope.product.stock_quantity;
+      $scope.quantity.value = $scope.minQuantity ;
+    }
+
+    CategoriesData.async();
     // Try to get product locally, fallback to REST API
     ProductsData.getProductAsync($stateParams.product_id).then(function(product) {
 
         $scope.product = product;
-
-        $scope.quantity = {
-            value: 1
-        };
+        $scope.productCategory =   CategoriesData.getByName($scope.product.categories[0]);
+        initiateQuantity($scope.productCategory);
 
         // Required for the image gallery to update
         $ionicSlideBoxDelegate.update();
@@ -201,8 +226,6 @@ angular.module('woocommerce-api.controllers', [])
         //window.plugins.socialsharing.share('Message', 'Subject', 'Image', 'Link');
         window.plugins.socialsharing.share(message, subject, null, link);
     }
-
-    CategoriesData.async();
 
     $scope.getSlugByName = function(name) {
         return CategoriesData.getByName(name).slug;
