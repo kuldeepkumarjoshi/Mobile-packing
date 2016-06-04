@@ -2,14 +2,20 @@
   'use strict';
 
     angular.module('woocommerce-api.controllers')
-.controller('SubcategoriesCtrl', function($scope, $rootScope, Data, UserData, MetaData,CategoriesData) {
+.controller('SubcategoriesCtrl', function($scope,$location, $rootScope, Data, UserData, MetaData,CategoriesData) {
   $scope.isEmptyData = true;
     $scope.categories = [];
+
+    $scope.moveToProduct = function(cat){
+      $rootScope.cat = cat;
+      $location.path('/app/categories/'+cat.slug+'/'+cat.name);
+    };
 
 $rootScope.$broadcast('loading:show');
   if($rootScope.cat != null){
     $scope.isEmptyData = false;
-      $scope.categories=$rootScope.cat;
+      $scope.categories =angular.copy($rootScope.cat);
+      $scope.categories.children.push({name:$scope.categories.name,count:$scope.categories.count,slug:$scope.categories.slug});
   }
 $rootScope.$broadcast('loading:hide');
 console.log(  $scope.categories);

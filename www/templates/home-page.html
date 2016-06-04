@@ -1,14 +1,4 @@
-<style>
-.categoryBox{
-    background-size: cover;
-    background-repeat: no-repeat;
-    /*height: 150px;*/
-    cursor: pointer;
-    padding-top: 72%;
-}
 
-
-</style>
 <ion-view title="{{index.name}}">
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
@@ -21,37 +11,24 @@
         <div class="screen">
             <div class="item-text-wrap text-center">
                 <a class="text-center"  href="#/app/products">
-                    <img src="images/all-product.jpg" class="banner"/>
+                    <img src="images/all-product.jpg" />
                   </a>
             </div>
         </div>
           <div class="row" ng-init="count=0"  ng-repeat="row in categories | partition:2">
-                  <!-- Parent -->
-                  <div  class="card col"  ng-repeat="category in row">
-
-
-                  <div class="card-content categoryBox" style="background-image:url(../images/{{category.slug}}.png);" ng-click="moveToCategory(category)">
-
-                      <div class="card-bg-image"></div>
-                      <div class="product-title  text-center " style="  background-color: wheat;">
-
-
-                          <h4 style="color: black;">{{category.name}} </h4>
-
+              <!-- Parent -->
+              <div  class="col"  ng-repeat="category in row">
+                  <div class="card-content categoryBox" style="background-image:url(images/{{category.slug}}.jpg);" ng-click="moveToCategory(category)">
+                      <div >
+                        {{category.name}}
                       </div>
 
-                      <div ng-if="category.description" class="text-right product-price">
+                      <!-- <div ng-if="category.description" class="text-right product-price">
                           <i class="icon ion-pricetag"></i>
                           <div class='item-text-wrap' ng-bind-html="category.description"></div>
-                      </div>
+                      </div> -->
                   </div>
-
-                  </div>
-
+              </div>
             </div>
-
-
-
-
     </ion-content>
 </ion-view>

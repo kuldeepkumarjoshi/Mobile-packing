@@ -1,0 +1,60 @@
+.categoryBox{
+  background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 73%;
+    box-shadow: 0px -16px 16px #2b2121 inset;
+    text-align: center;
+    font-size: 15px;
+    color: white;
+}
+.countBadge{
+  position: absolute;
+    /*background-color: #32AF28;*/
+      background-color: darkorange;
+    border-radius: 9px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    padding-bottom: 1%;
+    top: 5%;
+    width: 7%;
+    /* float: right; */
+    margin-right: 2%;
+    /* left: 4%; */
+    margin-left: 1%;
+}
+.countBadge2{
+    /*background-color: #32AF28;*/
+  background-color: darkorange;
+    border-radius: 9px;
+    margin-right: 2%;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    float: right;
+    width: 8%;
+    padding-bottom: 1%;
+}
+
+.viewAll{
+    /*background-color: #FFB516;*/
+  background-color: orchid;
+    text-align: center;
+    padding-top: 2%;
+    font-size: 27px;
+    border-radius: 5px;
+    border-style: double;
+    border-color: wheat;
+    border-width: 5px;
+}
+.noProduct{
+  background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 73%;
+    box-shadow: 0px -16px 16px #2b2121 inset;
+    text-align: center;
+    font-size: 15px;
+    color: white;
+  width: 100%;
+    opacity: 0.6;
+}

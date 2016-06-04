@@ -1,53 +1,3 @@
-<style>
-.card{
-  padding: 0px;
-  text-decoration: none;
-  box-shadow: none;
-}
-.imageBox{
-  width: 100%;
-  height: 150px;
-}
-.countBadge{
-  position: absolute;
-    /*background-color: #32AF28;*/
-      background-color: darkorange;
-    border-radius: 9px;
-    text-align: center;
-    font-size: 16px;
-    color: white;
-    padding-bottom: 1%;
-    top: 5%;
-    width: 7%;
-    /* float: right; */
-    margin-right: 2%;
-    /* left: 4%; */
-    margin-left: 1%;
-}
-.countBadge2{
-    /*background-color: #32AF28;*/
-  background-color: darkorange;
-    border-radius: 9px;
-    margin-right: 2%;
-    text-align: center;
-    font-size: 16px;
-    color: white;
-    float: right;
-    width: 8%;
-    padding-bottom: 1%;
-}
-.viewAll{
-    /*background-color: #FFB516;*/
-  background-color: orchid;
-    text-align: center;
-    padding-top: 2%;
-    font-size: 27px;
-    border-radius: 5px;
-    border-style: double;
-    border-color: wheat;
-    border-width: 5px;
-}
-</style>
 <ion-view title="Categories">
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
@@ -56,31 +6,51 @@
         <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
     <ion-content class="has-header">
-<!-- child only -->
-          <div class="row" ng-if="categories.children.length > 0"   >
-            <a class="card col"  href="#/app/categories/{{subCat.slug}}/{{subCat.name}}" ng-repeat="subCat in categories.children">
+<!-- child only --><div  ng-if="categories.count > 1"   >
+          <div class="row" ng-repeat="row in categories.children | partition:2"  >
+            <div  class="col"  ng-repeat="subCat in row">
+              <div class="card-content categoryBox" style="background-image:url(images/{{subCat.slug}}.jpg);"
+                      ng-click="moveToProduct(subCat)">
+                    <div >
+                      {{subCat.name}}
+                    </div>
+
+                <!-- <div ng-if="category.description" class="text-right product-price">
+                    <i class="icon ion-pricetag"></i>
+                    <div class='item-text-wrap' ng-bind-html="category.description"></div>
+                </div> -->
+              </div>
+            </div>
+
+            <!-- <a class="card col"  href="#/app/categories/{{subCat.slug}}/{{subCat.name}}" ng-repeat="subCat in categories.children">
                 <div class="imageBox">
                     <div class="countBadge">{{subCat.count}} </div>
-                    <img class="card-content" ng-src="../images/{{subCat.slug}}.png" style="width: auto;height: 100%;"  />
+                    <img class="card-content" ng-src="../images/{{subCat.slug}}.jpg" style="width: auto;height: 100%;"  />
 
                   </div>
                 <div class="product-title  text-center " style="background-color: mediumaquamarine;box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);border-radius: 0px 0px 2px 2px;">
                     <font size="3" color="black">{{subCat.name}} </font>
                 </div>
-            </a>
+            </a> -->
           </div>
           <!-- Parent -->
-          <div class="row" ng-if="categories.count > 0">
+          <!-- <div class="row" ng-if="categories.count > 0">
               <a class='card imageBox viewAll'  class="text-center category-title" href=" #/app/categories/{{categories.slug}}/{{categories.name}}">
                 <div class="countBadge2">{{categories.count}} </div><br/>
                 View All  <div class='h3'>{{categories.name}}  <i class="ion-chevron-right"></i></div>
 
               </a>
-          </div>
+          </div> -->
+        </div>
   <div class="row" ng-if="!categories.count"   >
+    <div class="card-content noProduct" style="background-image:url(images/workInprocess.jpg);">
 
-  <div class='card imageBox viewAll' >Yet {{categories.name}} not have any product.</div>
 
+      <!-- <div ng-if="category.description" class="text-right product-price">
+          <i class="icon ion-pricetag"></i>
+          <div class='item-text-wrap' ng-bind-html="category.description"></div>
+      </div> -->
+    </div>
 
   </div>
                 <!-- Sub-categories -->

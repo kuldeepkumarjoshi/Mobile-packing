@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.packnation.packing" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Packnation</name>
-  <description>&#xD;
-    Ionic WooCommerce API Application is an eCommerce Ionic Application compatible with WooCommerce.&#xD;
+  <description>
+    Ionic WooCommerce API Application is an eCommerce Ionic Application compatible with WooCommerce.
   </description>
   <content src="index.html"/>
   <access origin="*"/>
@@ -30,7 +30,6 @@
     <splash src="resources\android\splash\drawable-land-mdpi-screen.png" density="land-mdpi"/>
     <splash src="resources\android\splash\drawable-port-ldpi-screen.png" density="port-ldpi"/>
     <splash src="resources\android\splash\drawable-port-mdpi-screen.png" density="port-mdpi"/>
-    <splash src="resources\android\splash\drawable-port-hdpi-screen.png" density="port-hdpi"/>
   </platform>
   <platform name="ios">
     <icon src="resources\ios\icon\icon.png" width="57" height="57"/>
@@ -51,5 +50,5 @@
     <icon src="resources\ios\icon\icon-small@3x.png" width="87" height="87"/>
     <splash src="resources\ios\splash\Default~iphone.png" width="320" height="480"/>
   </platform>
-  <icon src="resources\ios\icon\icon-small@3x.png"/>
+  <icon src="resources\android\icon\drawable-xhdpi-icon.png"/>
 </widget>
