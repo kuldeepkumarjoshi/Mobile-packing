@@ -154,17 +154,18 @@ angular.module('woocommerce-api.controllers', [])
     $scope.minQuantity = 1;
     $scope.maxQuantity = 100;
     $scope.quantity ={};
+    $scope.inStock = true;
     ProductsData.clear();
 
     $scope.stepUp = function(){
-      if(  $scope.quantity+stepValue > $scope.maxQuantity){
+      if(  $scope.quantity.value + stepValue > $scope.maxQuantity){
           $scope.quantity.value = $scope.maxQuantity;
       }else{
           $scope.quantity.value += stepValue;
       }
     }
     $scope.stepDown = function(){
-      if(  $scope.quantity-stepValue < $scope.minQuantity){
+      if(  $scope.quantity.value - stepValue < $scope.minQuantity){
           $scope.quantity.value = $scope.minQuantity;
       }else{
           $scope.quantity.value -= stepValue;
@@ -175,6 +176,7 @@ angular.module('woocommerce-api.controllers', [])
       $scope.minQuantity = category.minQuantity;
       $scope.maxQuantity = $scope.product.stock_quantity;
       $scope.quantity.value = $scope.minQuantity ;
+      $scope.inStock = ($scope.minQuantity < $scope.product.stock_quantity);
     }
 
     CategoriesData.async();
@@ -193,9 +195,9 @@ angular.module('woocommerce-api.controllers', [])
     });
 
     // Review loader (Despite the ambigious wording, review pagination is not supported by the WC API)
-    ReviewsData.async($stateParams.product_id).then(function() {
-        $scope.reviews = ReviewsData.getAll();
-    });
+    // ReviewsData.async($stateParams.product_id).then(function() {
+    //     $scope.reviews = ReviewsData.getAll();
+    // });
 
     // Pretty print dates, e.g. "5 days ago"
     $scope.humaneDate = humaneDate;

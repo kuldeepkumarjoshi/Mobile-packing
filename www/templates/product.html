@@ -1,5 +1,5 @@
 <ion-view view-title='Product'>
-    <ion-nav-title>{{product.title}}</ion-nav-title>
+    <ion-nav-title style="width: 129px;">{{product.title}}</ion-nav-title>
     <ion-nav-bar class="bar-stable nav-title-slide-ios7">
     <ion-nav-back-button class="button-clear"><i class="icon ion-ios-arrow-back"></i></i> Back</ion-nav-back-button>
     </ion-nav-bar>
@@ -42,23 +42,21 @@
                     </div>
                 </div>
             </div>
-            <div class="item" style="padding:0px;">
+            <div class="item" style="padding:0px;" ng-if="inStock">
                 <div class="row">
                     <div class="col" style="padding-top:6%;">Quantity:</div>
 
                     <div class="row">
                         <div class="col" style="    margin-left: 29%;">
-                          <button ng-hide="quantity.value == minQuantity" class="button icon ion-ios-minus-outline" ng-click="stepDown()"></button>
+                          <button ng-hide="quantity.value <= minQuantity" class="button icon ion-ios-minus-outline" ng-click="stepDown()"></button>
                         </div>
                         <div class="col">  <span style="float:right;" class="input-label">{{quantity.value}}</span> </div>
                         <div class="col">
-                          <button ng-hide="quantity.value == maxQuantity" class="button icon ion-ios-plus-outline" ng-click="stepUp()"></button>
+                          <button ng-hide="quantity.value >= maxQuantity" class="button icon ion-ios-plus-outline" ng-click="stepUp()"></button>
                         </div>
                    </div>
 
-                     <form ng-show="false" name="quantityForm" style="width:100%">
-                    <input class='text-right' name="quantity" type="number" min="1" max="{{product.stock_quantity}}" ng-model='quantity.value' required >
-                    </form>
+
                 </div>
 
 
@@ -71,7 +69,7 @@
                     </label>
                 </div> -->
             </div>
-            <div class="item">
+            <div class="item" ng-if="inStock">
               <div style=" display:inline-block;" ng-if="product.stock_quantity">
                   <span>Stock Quantity: <b>{{product.stock_quantity}}</b></span>
               </div>
@@ -79,8 +77,8 @@
             <div class="item item-divider ">
                 <div class='row'>
                     <div class="col text-left">
-                        <button class='button button-positive' ng-click="toBasket()" ng-if="product" ng-disabled="!product.in_stock || (product.stock_quantity && (product.stock_quantity < quantity.value)) || !quantityForm.quantity.$valid">
-                            <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="product.in_stock && quantityForm.quantity.$valid">Add To Cart</span><span ng-if="!product.in_stock">Out of stock</span><span ng-if="!quantityForm.quantity.$valid">Invalid Quantity</span>
+                        <button class='button button-positive' ng-click="toBasket()" ng-if="product" ng-disabled="!inStock">
+                            <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="inStock ">Add To Cart</span><span ng-if="!inStock">Out of stock</span>
                         </button>
                     </div>
                     <div class="col text-right">
@@ -93,7 +91,7 @@
             </div>
 
             <!-- Reviews -->
-            <div class="list" ng-if="reviews">
+            <!-- <div class="list" ng-if="reviews">
                 <div class="card" ng-repeat="review in reviews" ng-if="reviews.length > 0">
                     <div class="item">
                         <h2>{{review.reviewer_name}}</h2>
@@ -108,7 +106,7 @@
                 </div>
                 <ion-infinite-scroll ng-if="hasMoreReviews()" on-infinite="loadMoreReviews()" distance="10%">
                 </ion-infinite-scroll>
-            </div>
+            </div> -->
 
         </div>
     </ion-content>
