@@ -1,0 +1,38 @@
+<ion-view title="NEFT Payment">
+  <style>
+.largeSize {
+  font-size: 83px;
+  color: green;
+}
+  </style>
+    <ion-content class="has-header">
+        <div class="card" >
+            <div class="item item-divider">
+                <div style="text-align:center;">
+                  <i class="icon largeSize ion-happy-outline"></i> <br/>
+                   Total:{{order.total}} {{order.currency}}<br/>
+                  <b>Thank you. Your order has been received.</b>
+                </div>
+                    <div style="float:left;">Order id:{{order.id}}</div>
+                    <div style="float:right;">Date:{{order.created_at | date}}</div>
+            </div>
+            <div class="item item-text-wrap">
+                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.
+                  Your order won’t be shipped until the funds have cleared in our account.</p><br/>
+                <div class="item item-divider" style="text-align:center;">
+                              <b>Our Bank Details</b>
+                </div>
+                <div class="item item-text-wrap">
+                  <strong>Parnami Brothers - ICIC</strong><br/>
+                  <strong>  Account Number:</strong> 031505007428<br/>
+                  <strong>  IFSC:</strong> ICIC0000315
+                </div>
+            </div>
+        </div>
+
+
+    </ion-content>
+    <div class="bar bar-footer bar-positive">
+     <a class="title" href="#/app/home">OK</a>
+   </div>
+</ion-view>

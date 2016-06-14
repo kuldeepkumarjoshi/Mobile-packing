@@ -378,7 +378,8 @@ angular.module('woocommerce-api.data', [])
                 // if they don't and the request is to be completed in-app
                 // the user should be prompted.
                 shipping_address: customer.shipping_address,
-                billing_address: customer.billing_address
+                billing_address: customer.billing_address,
+                note:'mobile-app'
             }
         };
 

@@ -190,6 +190,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
+    .state('app.neftPayment', {
+        url: "/neftPayment",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/neftPayment.html",
+                controller: 'NeftPaymentCtrl'
+            }
+        }
+    })
     .state('app.about', {
         url: "/about",
         views: {
@@ -201,4 +210,5 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/home');
+  //$urlRouterProvider.otherwise('/app/neftPayment');
 });

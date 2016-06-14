@@ -24,54 +24,36 @@
         <div ng-show="!isPaid()">
 
 
-            <div class="item item-divider">
-
-
-                Customer
-            </div>
-
+            <div class="item item-divider">                Customer            </div>
             <label class="item item-input">
                 <span class="input-label">E-mail</span>
                 <input type="email" ng-model="email.addr" ng-change="evaluateEmail()" ng-model-options="{debounce: 750}" placeholder="Enter your Customer E-mail">
             </label>
             <a ng-if='!canPay()' class='item subdued text-center' ng-click='registerUser()'>Don't have an account yet?</a>
-
-
-
-
-
-
-
-
-
             <div class="card" ng-if="user">
-
                 <div class="item item-avatar">
                     <img ng-if="user.customer.avatar_url" src="{{user.customer.avatar_url}}" />
                     <h2>{{user.customer.last_name}} {{user.customer.first_name}}</h2>
                     <p><span ng-if="user.customer.username"><strong>({{user.customer.username}})</strong></span> created at {{user.customer.created_at | date: 'fullDate'}}</p>
                 </div>
-
-
                 <div class="item item-divider" ng-if="user.customer.last_order_date" ui-sref="app.orders({customer_id: user.customer.id})">
                 Last Order (Date / ID)
                 </div>
                 <div class="item item-text-wrap" ng-if="user.customer.last_order_date">
                 {{user.customer.last_order_date | date: 'fullDate'}} <strong>({{user.customer.last_order_id}})</strong>
-
                 <button class="button button-block button-energized" ui-sref="app.orders({customer_id: user.customer.id})">
                     View all the Orders
                 </button>
-
                 </div>
-
             </div>
 
             <div class="padding">
-                <button class="button button-block button-positive" ng-click="payViaSite()" disabled ng-if='!canPay()'>Pay via Site</button>
-                <button class="button button-block button-positive" ng-click="payViaSite()" ng-if='canPay()'>Pay via Site</button>
+              <button class="button button-block button-positive"  disabled ng-if='!canPay()'>NEFT Payment</button>
+              <button class="button button-block button-positive" ng-click="neft_Payment()" ng-if='canPay()'>NEFT Payment</button>
+                <!-- <button class="button button-block button-positive" ng-click="payViaSite()" disabled ng-if='!canPay()'>Pay via Site</button>
+                <button class="button button-block button-positive" ng-click="payViaSite()" ng-if='canPay()'>Pay via Site</button> -->
             </div>
-            <div class="item-divider padding">
+            <!-- <div class="item-divider padding">
                     <div class="text-center">
                         <button class='button button-block button-positive' disabled ng-if='!canPay()' ng-click="payViaPaypal()">
                             <i class="icon ion-card"> Pay via PayPal</i>
@@ -80,15 +62,15 @@
                             <i class="icon ion-card"> Pay via PayPal</i>
                         </button>
                     </div>
-<!--                     <div class="col text-center">
+<                     <div class="col text-center">
                         <button class='button button-positive' disabled ng-if='!canPay()' ng-click="payViaStripe()">
                             <i class="icon ion-ios-cart"> Pay via Stripe</i>
                         </button>
                         <button class='button button-positive' ng-if='canPay()' ng-click="payViaStripe()">
                             <i class="icon ion-ios-cart"> Pay via Stripe</i>
                         </button>
-                    </div> -->
-            </div>
+                    </div>
+                  </div> -->
         </div>
         <div ng-show="isPaid()">
             <p class='item item-text-wrap'>
@@ -97,4 +79,4 @@
             </p>
         </div>
     </ion-content>
-    </div>
+  </ion-view>

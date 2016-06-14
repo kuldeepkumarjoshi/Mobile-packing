@@ -19,7 +19,7 @@
 
     <ion-content class="has-header">
         <div class="list card">
-            <div class="item item-divider">
+            <div class="item item-divider" style="min-height:220px;">
                 <ion-slide-box on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true">
                     <ion-slide class="item item-image" ng-repeat="picture in product.images">
                         <img ng-src="{{picture.src}}" />
@@ -91,7 +91,7 @@
             </div>
 
             <!-- Reviews -->
-            <!-- <div class="list" ng-if="reviews">
+             <div class="list" ng-if="reviews">
                 <div class="card" ng-repeat="review in reviews" ng-if="reviews.length > 0">
                     <div class="item">
                         <h2>{{review.reviewer_name}}</h2>
@@ -106,7 +106,7 @@
                 </div>
                 <ion-infinite-scroll ng-if="hasMoreReviews()" on-infinite="loadMoreReviews()" distance="10%">
                 </ion-infinite-scroll>
-            </div> -->
+            </div>
 
         </div>
     </ion-content>
