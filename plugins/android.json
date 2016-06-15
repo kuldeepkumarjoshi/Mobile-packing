@@ -33,6 +33,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.packnation.packing"
+        },
+        "com.razorpay.cordova": {
+            "PACKAGE_NAME": "com.packnation.packing"
         }
     },
     "dependent_plugins": {}
