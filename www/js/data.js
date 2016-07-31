@@ -81,7 +81,76 @@ angular.module('woocommerce-api.data', [])
 
     return data;
 })
+.factory('CartData', function($http, $q, CONFIG) {
+  var data = {};
+  var service = {};
+  service.generateSessionCart = function(basketItems){
+    var shortCart =[];
+    angular.forEach(basketItems, function(cat, key) {
+      shortCart.push({id:cat.id,quantity:cat.quantity});
+    });
+    return shortCart;
+  }
+  service.getCartAsync = function(params) {
 
+      params = params || {};
+      var deferred = $q.defer();
+
+      var url = generateQuery('GET', '/custom/cart', CONFIG, params);
+
+      $http({
+          method: 'GET',
+          url: url,
+          timeout: CONFIG.request_timeout
+      }).then(
+          function(result) {
+              //console.log(result)
+              // This callback will be called asynchronously when the response is available.
+              last_fetch = result.data['products'].length;
+              // Get new data and combine with existing ones, remove duplicates (fail-safe)
+              data = _.union(data, result.data['products']);
+              deferred.resolve();
+
+          },
+          function(result) {
+              console.log(result)
+              deferred.reject();
+          }
+      );
+
+      return deferred.promise;
+  };
+
+  service.addToCart = function(cart) {
+      var deferred = $q.defer();
+      var params = {};
+
+      var url = generateQuery('POST', '/custom/cart', CONFIG, params);
+
+      $http({
+          method: 'POST',
+          url: url,
+          timeout: CONFIG.request_timeout,
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: cart
+
+      }).then(
+          function(result) {
+              deferred.resolve(result);
+
+          },
+          function(result) {
+              deferred.reject(result);
+          }
+      );
+
+      return deferred.promise;
+
+  };
+    return service;
+})
 .factory('ProductsData', function($http, $q, CONFIG) {
 
     var data = {};
@@ -277,11 +346,12 @@ angular.module('woocommerce-api.data', [])
     return service;
 })
 
-.factory("BasketData", function($rootScope, $http, $q, $ionicPopup, UserData, CONFIG) {
+.factory("BasketData", function($rootScope,$window, $http, $q, $ionicPopup, UserData, CONFIG) {
 
     var basket = [];
     var service = {};
-
+    var totalBasketValue='';
+    var productIdCartMap =[];
  /*
     Payment Options:
         Direct Bank Transfer:   bacs
@@ -292,81 +362,114 @@ angular.module('woocommerce-api.data', [])
     If you run a custom WooCommerce installation you will
     want to update this with the extra choices you implemented.
 */
+
     var payment_methods = {
-        bacs: 'Direct Bank Transfer',
+        bacs: 'NEFT Payment',
+        bacs2: 'Direct Bank Transfer',
         cheque: 'Cheque Payment',
         cod: 'Cash on Delivery',
-        paypal: 'PayPal'
+        paypal: 'PayPal',
+        razorPay:'razorPay'
     }
-
+    service.putProductIdCartMap = function(key,value){
+      productIdCartMap[key]=value;
+    }
+    service.getProductIdCartMap = function(key){
+      return productIdCartMap[key];
+    }
     service.add = function(product) {
-        var index = _.indexOf(basket, product);
+      //  var index = _.indexOf(basket, product);
         // If product is already in the basket, increase quantity
         // ToDo: Handle the multiples of the same product's different variants, as separate orders
-        if (index != -1)
-            basket[index].quantity += product.quantity;
-        else
+    //    if (index != -1)
+    //        basket[index].quantity += product.quantity;
+    //    else
             basket.push(product);
-
-        var addedToCart = $ionicPopup.show({
-            title: 'Added to Cart',
-            subTitle: 'Product successfully added to your Cart.',
-            buttons: [
-                { text: 'OK', type: 'button-positive' }
-            ]
-        });
-
-        $rootScope.$broadcast('basket');
-
     }
-
+    service.broadcast = function(title,subTitle,btnTxt,btnClass){
+      var addedToCart = $ionicPopup.show({
+          title: title,
+          subTitle: subTitle,
+          buttons: [
+              { text: btnTxt, type: btnClass }
+          ]
+      });
+      $rootScope.$broadcast('basket');
+    }
+    service.setTotalBasketValue = function(totalCartValue){
+      totalBasketValue = totalCartValue;
+    }
+    service.getTotalBasketValue = function(){
+        return totalBasketValue ;
+    }
     service.emptyBasket = function() {
         basket = [];
         $rootScope.$broadcast('basket');
     }
 
-    function formatProducts() {
+    var formatProducts = function() {
 
-        var line_items = [];
-        angular.forEach(basket, function(product, key) {
-            var order_json = {
-                'product_id': product.id,
-                'quantity': product.quantity
-            };
-            var variations = {}
+         var line_items = [];
+         angular.forEach(basket, function(product, key) {
+             var order_json = {
+                 'product_id': product.id,
+                 'quantity': product.quantity
+             };
+             var variations = {};
 
-            angular.forEach(product['attributes'], function(attr, key) {
-                variations['pa_' + attr.name] = attr.options[attr.position];
-            });
+             // angular.forEach(product['attributes'], function(attr, key) {
+             //     variations['pa_' + attr.name] = attr.options[attr.position];
+             // });
 
-            if (variations != {})
-                order_json['variations'] = variations;
-            line_items.push(order_json);
-        });
-        return line_items;
-    };
+             if (product.variation && product.variation.length>0) {
+                 variations['pa_' + product.variation.attributes[0].slug] = product.variation.attributes[0].option;
+             }
+
+
+
+
+             if (!_.isEmpty(variations)) {
+
+                 order_json['variations'] = variations;
+             }
+             line_items.push(order_json);
+         });
+
+         return line_items;
+     };
 
     service.getBasket = function() {
         return basket;
     }
 
     service.getTotal = function() {
-        var total_price = 0;
-        for (var i = basket.length - 1; i >= 0; i--)
-            total_price +=
-                Number(basket[i].quantity) * Number(basket[i].price);
-
-        return total_price;
-    };
+       var total_price = 0;
+       if(totalBasketValue!=''){
+         total_price = totalBasketValue;
+       }else{
+           for (var i = basket.length - 1; i >= 0; i--)
+               if (basket[i].variation && basket[i].variation.length>0) {
+                   total_price +=
+                   Number(basket[i].quantity) * Number(basket[i].variation.price);
+               } else {
+                   total_price +=
+                   Number(basket[i].quantity) * Number(basket[i].price);
+               }
+         }
+       return total_price;
+   };
 
     // Sends the order to the server
-    service.sendOrder = function(method, paid) {
+    service.sendOrder = function(method, paid,transactionId) {
         var deferred = $q.defer();
         var params = {};
 
         var url = generateQuery('POST', '/orders', CONFIG, params);
 
         var customer = UserData.getUserData();
+        if(!customer){
+          customer =  JSON.parse($window.localStorage['user']).customer;
+        }
 
         console.warn("Customer Data:", JSON.stringify(customer));
 
@@ -387,6 +490,7 @@ angular.module('woocommerce-api.data', [])
             order_data.order.payment_details = {
                 method_id: method,
                 method_title: payment_methods[method],
+                transaction_id: transactionId,
                 paid: paid ? paid : false // Handling the case in which the var is undefined/null
             };
         }
@@ -397,7 +501,7 @@ angular.module('woocommerce-api.data', [])
         $http({
             method: 'POST',
             url: url,
-            timeout: CONFIG.request_timeout,
+            timeout:20000,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },

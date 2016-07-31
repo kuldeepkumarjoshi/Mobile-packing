@@ -1,32 +1,23 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 "use strict";
 angular.module('woocommerce-api.controllers', [])
-
-// Application Controller
-.controller('AppCtrl', function($scope, MenuData, BasketData) {
-
-    $scope.items = MenuData.items;
-
-    var cartItems = BasketData.getBasket();
-    $scope.cartItems = cartItems.length;
-
-    $scope.$on('basket', function(event, args) {
-        cartItems = BasketData.getBasket();
-        $scope.cartItems = cartItems.length;
-    });
-
-})
-
-// Home Controller
-.controller('HomeCtrl', function($scope,$state, $rootScope, Data, UserData, MetaData,CategoriesData) {
+.controller('AppCtrl',AppCtrl)// Home Controller
+.controller('HomeCtrl', function($scope,$state, $rootScope, Data, UserData, MetaData,CategoriesData,CartData) {
 
     $scope.items = Data.items;
 
     $scope.index = {};
+    $scope.getCart = function(){
+      CartData.getCartAsync();
+    };
+    $scope.createCart= function(){
+      CartData.createCart({id:8121,quantity:1002});
+    };
 
     MetaData.getProperties().then(
         function(result) {
             $scope.index = result;
+
         }
     );
 
@@ -40,7 +31,7 @@ angular.module('woocommerce-api.controllers', [])
         // successCallback
         function() {
             var cats = CategoriesData.getAll();
-            console.log(cats)
+          //  console.log(cats)
                 // Create layered categories/sub-categories view
             var parents = [];
 
@@ -145,96 +136,6 @@ angular.module('woocommerce-api.controllers', [])
     });
 
 })
-
-// Product Controller
-.controller('ProductCtrl', function($rootScope, $scope, $stateParams, $ionicSlideBoxDelegate, ProductsData, BasketData, ReviewsData, CategoriesData) {
-
-    $rootScope.$broadcast('loading:show');
-    var stepValue = 1;
-    $scope.minQuantity = 1;
-    $scope.maxQuantity = 100;
-    $scope.quantity ={};
-    $scope.inStock = true;
-    ProductsData.clear();
-
-    $scope.stepUp = function(){
-      if(  $scope.quantity.value + stepValue > $scope.maxQuantity){
-          $scope.quantity.value = $scope.maxQuantity;
-      }else{
-          $scope.quantity.value += stepValue;
-      }
-    }
-    $scope.stepDown = function(){
-      if(  $scope.quantity.value - stepValue < $scope.minQuantity){
-          $scope.quantity.value = $scope.minQuantity;
-      }else{
-          $scope.quantity.value -= stepValue;
-      }
-    }
-    function initiateQuantity(category){
-      stepValue = category.stepValue;
-      $scope.minQuantity = category.minQuantity;
-      $scope.maxQuantity = $scope.product.stock_quantity;
-      $scope.quantity.value = $scope.minQuantity ;
-      $scope.inStock = ($scope.minQuantity < $scope.product.stock_quantity);
-    }
-
-    CategoriesData.async();
-    // Try to get product locally, fallback to REST API
-    ProductsData.getProductAsync($stateParams.product_id).then(function(product) {
-
-        $scope.product = product;
-        $scope.productCategory =   CategoriesData.getByName($scope.product.categories[0]);
-        initiateQuantity($scope.productCategory);
-
-        // Required for the image gallery to update
-        $ionicSlideBoxDelegate.update();
-
-        $rootScope.$broadcast('loading:hide');
-
-    });
-
-    // Review loader (Despite the ambigious wording, review pagination is not supported by the WC API)
-    ReviewsData.async($stateParams.product_id).then(function() {
-        $scope.reviews = ReviewsData.getAll();
-    });
-
-    // Pretty print dates, e.g. "5 days ago"
-    $scope.humaneDate = humaneDate;
-
-    // In app browser
-    $scope.openLink = function(url) {
-        window.open(url, '_blank');
-    };
-
-    // Add product to basket
-    $scope.toBasket = function() {
-        $scope.product['quantity'] = $scope.quantity.value;
-        BasketData.add($scope.product);
-    };
-
-    $scope.isNumber = angular.isNumber;
-
-    // Share Product
-    $scope.shareProduct = function() {
-
-        var subject = $scope.product.title;
-        var message = $scope.product.short_description;
-        message = message.replace(/(<([^>]+)>)/ig, "");
-
-        var link = $scope.product.permalink;
-
-        //Documentation: https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin
-         //window.plugins.socialsharing.share('Message', 'Subject', 'Image', 'Link');
-        window.plugins.socialsharing.share(message, subject, null, link);
-    }
-
-    $scope.getSlugByName = function(name) {
-        return CategoriesData.getByName(name).slug;
-    }
-
-})
-
 // Categories Controller
 .controller('CategoriesCtrl', function($rootScope, $scope, CategoriesData) {
 
@@ -358,61 +259,116 @@ angular.module('woocommerce-api.controllers', [])
 })
 
 // Basket Controller
-.controller('BasketCtrl', function($rootScope, $scope, $state, $sce, BasketData, MetaData) {
+.controller('BasketCtrl', function($rootScope,CartData, $scope, $state, $sce, BasketData, MetaData) {
 
-    $scope.meta = {};
+  $scope.meta = {};
+  $scope.basketProducts = BasketData.getBasket();
+  console.log($scope.basketProducts);
 
-    MetaData.getProperties().then(
-        function(result) {
-            $scope.meta = result.meta;
-        }
-    );
-
+  function setTotalField(){
+    $rootScope.$broadcast('loading:show');
+      MetaData.getProperties().then(
+          function(result) {
+              $scope.meta = result.meta;
+              if ($scope.basketProducts.length > 0) {
+                  var total_price = BasketData.getTotal();
+              $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
+              $scope.totalPrice = total_price.toFixed(2) ;
+            }  else {
+                  $scope.totalPriceHtml = '0';
+                  $scope.totalPrice = 0;
+              }
+                $rootScope.$broadcast('loading:hide');
+          }
+      );
+    }
+    setTotalField();
     // Get the basket products
-    $scope.basketProducts = BasketData.getBasket();
+
     // Calculate total price
-    $scope.calculateTotal = function() {
+
 
         if ($scope.basketProducts.length > 0) {
             var total_price = BasketData.getTotal();
 
             if ($scope.meta.currency_position == 'left') {
-                $scope.totalPriceHtml = '<span class="amount">'
-                    + $scope.meta.currency_format + total_price.toFixed(2) + '</span>';
+                $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
             } else if ($scope.meta.currency_position == 'left_space') {
-                $scope.totalPriceHtml = '<span class="amount">'
-                    + $scope.meta.currency_format + ' ' + total_price.toFixed(2) + '</span>';
+                $scope.totalPriceHtml =  $scope.meta.currency_format + ' ' + total_price.toFixed(2) ;
             } else if ($scope.meta.currency_position == 'right') {
-                $scope.totalPriceHtml = '<span class="amount">'
-                    + total_price.toFixed(2) + $scope.meta.currency_format + '</span>';
+                $scope.totalPriceHtml =  total_price.toFixed(2) + $scope.meta.currency_format ;
             } else {
-                $scope.totalPriceHtml = '<span class="amount">'
-                    + total_price.toFixed(2) + ' ' + $scope.meta.currency_format + '</span>';
+                $scope.totalPriceHtml =  total_price.toFixed(2) + ' ' + $scope.meta.currency_format;
             }
-
-            $scope.totalPrice = total_price.toFixed(2);
-
         } else {
-            $scope.totalPriceHtml = '<span class="amount">0</span>';
+            $scope.totalPriceHtml = '0';
             $scope.totalPrice = 0;
         }
-    
-        return $scope.totalPriceHtml;
-    };
 
 
+
+    $scope.getFormmatedPrice = function(price) {
+
+           var formmatedPrice;
+
+           if ($scope.meta.currency_position == 'left') {
+               formmatedPrice = '<span class="amount">'
+                   + $scope.meta.currency_format + price + '</span>';
+           } else if ($scope.meta.currency_position == 'left_space') {
+               formmatedPrice = '<span class="amount">'
+                   + $scope.meta.currency_format + ' ' + price + '</span>';
+           } else if ($scope.meta.currency_position == 'right') {
+               formmatedPrice = '<span class="amount">'
+                   + price + $scope.meta.currency_format + '</span>';
+           } else {
+               formmatedPrice = '<span class="amount">'
+                   + price + ' ' + $scope.meta.currency_format + '</span>';
+           }
+
+           return formmatedPrice;
+       };
     $scope.emptyBasket = function() {
         $scope.basketProducts = [];
         BasketData.emptyBasket();
     };
 
     $scope.removeProduct = function(id) {
+      $rootScope.$broadcast('loading:show');
+    var cart =  CartData.generateSessionCart(BasketData.getBasket());
+    var product = _.find(cart, { id: parseInt(id) });
+    cart.splice(cart.indexOf(product), 1);
+    console.log(cart);
+    CartData.addToCart(cart).then(
+      function(response){
+        if(response.data){
+          console.log("response");
+          console.log(response);
+          BasketData.emptyBasket();
+          var basketItems = angular.copy(response.data.cartItems);
+          var totalCartValue = angular.copy(response.data.totalCartValue);
+          angular.forEach(basketItems, function(item, key) {
+            var cartProduct = [];
+              cartProduct = BasketData.getProductIdCartMap(item.product_id);
+              cartProduct['price']= item.data.price;
+              cartProduct['quantity']= item.quantity;
+              cartProduct['variation']= item.variation;
+            BasketData.add(cartProduct);
+          });
+          $scope.basketProducts = BasketData.getBasket();
+          $scope.cartItems = $scope.basketProducts.length;
+          BasketData.setTotalBasketValue(totalCartValue);
+          if ($scope.basketProducts.length > 0) {
+              var total_price = BasketData.getTotal();
+            $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
+            $scope.totalPrice = total_price.toFixed(2) ;
+          }else{
+                $scope.totalPriceHtml = '0';
+                $scope.totalPrice = 0;
+          }
+            $rootScope.$broadcast('loading:hide');
 
-        var product = _.find($scope.basketProducts, { id: parseInt(id) });
-
-        $scope.basketProducts.splice($scope.basketProducts.indexOf(product), 1);
-        $rootScope.$broadcast('basket');
-
+        }
+    });
     };
 
     $scope.proceedToOrder = function() {
@@ -420,7 +376,7 @@ angular.module('woocommerce-api.controllers', [])
     };
 })
 // New Customer Controller
-.controller('NewCustomerCtrl', function($scope, $ionicPopup, UserData) {
+.controller('NewCustomerCtrl', function($scope, $rootScope, $window, $ionicPopup, UserData) {
 
     $scope.customer = {};
     $scope.billing_address = {};
@@ -428,7 +384,7 @@ angular.module('woocommerce-api.controllers', [])
     $scope.customer.edit = true;
 
     $scope.createCustomer = function() {
-
+      $rootScope.$broadcast('loading:show');
         var data = {
             customer: {
                 email: $scope.customer.email,
@@ -466,14 +422,24 @@ angular.module('woocommerce-api.controllers', [])
         UserData.createCustomer(data).then(function(result) {
             $scope.customer = result.data.customer;
             $scope.customer.edit = false;
-
+            if(!$window.localStorage['user']){
+               $scope.isLogedIn = true;
+                $scope.emailVerified = true;
+                $scope.user= {};
+                $scope.user.customer = $scope.customer;
+                $window.localStorage['user'] =JSON.stringify($scope.user);
+                $window.location.reload(true);
+              }
+              $rootScope.$broadcast('loading:hide');
             var alertPopup = $ionicPopup.alert({
                 title: 'Success',
                 template: 'Customer created successfully'
             });
 
+
         }, function(result) {
             console.log(result)
+              $rootScope.$broadcast('loading:hide');
             var alertPopup = $ionicPopup.alert({
                 title: 'Registration Error',
                 template: result.data.errors[0].message

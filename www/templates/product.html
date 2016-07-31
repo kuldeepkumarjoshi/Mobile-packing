@@ -42,6 +42,18 @@
                     </div>
                 </div>
             </div>
+            <div class="item" style="padding:0px;" ng-if="tableData">
+              <div class="card">
+                <div class="item item-divider">
+                  Quantity discount:
+                </div>
+                <div class="row item item-text-wrap" ng-repeat="disRow in tableData" style="padding:0px;">
+                    <div class="col col-33 col-offset-10">  {{disRow.min}} -  <span ng-if="! $last"> {{disRow.max}}</span></div>
+                    <div class="col col-33 col-offset-10"><i class="icon ion-pricetag"></i>{{disRow.display_price}}</div>
+                </div>
+              </div>
+
+            </div>
             <div class="item" style="padding:0px;" ng-if="inStock">
                 <div class="row">
                     <div class="col" style="padding-top:6%;">Quantity:</div>
@@ -68,6 +80,11 @@
                         </select>
                     </label>
                 </div> -->
+                <div>
+                   <ion-list>
+                       <ion-radio ng-repeat="variation in product.variations" ng-model="product.variation" ng-value="variation" ng-click="updateProduct(variation)">{{variation.attributes[0].name}} ({{variation.attributes[0].option}}) - {{variation.price}}</ion-radio>
+                   </ion-list>
+               </div>
             </div>
             <div class="item" ng-if="inStock">
               <div style=" display:inline-block;" ng-if="product.stock_quantity">
@@ -81,17 +98,17 @@
                             <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="inStock ">Add To Cart</span><span ng-if="!inStock">Out of stock</span>
                         </button>
                     </div>
-                    <div class="col text-right">
+                    <!-- <div class="col text-right">
                         <div style='vertical-align: middle; margin-top: 16px; margin-right: 8px'>
                             <i class="icon ion-pricetag"></i>
                             <span class='product-price' ng-bind-html="product.price_html"></span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
             <!-- Reviews -->
-             <div class="list" ng-if="reviews">
+             <!-- <div class="list" ng-if="reviews">
                 <div class="card" ng-repeat="review in reviews" ng-if="reviews.length > 0">
                     <div class="item">
                         <h2>{{review.reviewer_name}}</h2>
@@ -106,7 +123,7 @@
                 </div>
                 <ion-infinite-scroll ng-if="hasMoreReviews()" on-infinite="loadMoreReviews()" distance="10%">
                 </ion-infinite-scroll>
-            </div>
+            </div> -->
 
         </div>
     </ion-content>

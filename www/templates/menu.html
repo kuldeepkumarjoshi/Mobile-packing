@@ -17,6 +17,12 @@
                     <i class="icon {{item.icon}}"></i> {{item.title}}
                 </ion-item>
             </ion-list>
+            <ion-item style="text-align:center;" ng-click="actionLogin()">
+
+                <i class="icon loginIcon ion-power"></i><br/>
+                <span ng-if="isLogedIn">Logout</span>
+                <span ng-if="!isLogedIn">Login</span>
+            </ion-item>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>

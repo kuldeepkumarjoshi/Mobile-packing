@@ -41,7 +41,7 @@
               $state.go('app.neftPayment');
 
         };
-      
+
         $scope.evaluateEmail = function() {
             var valid = email_regex.test($scope.email.addr);
 
@@ -86,6 +86,49 @@
         $scope.isPaid = function() {
             return $scope.paid;
         };
+        $scope.payViaRazorpay = function(){
+          $scope.paid=false;
+            var options = {
+                description: 'Please check cart your amount before pay.',
+                image:"http://packnation.in/wp-content/uploads/2015/12/logo.jpg",
+                currency: 'INR',
+                key: 'rzp_live_Jta8q6CBITnSIc',
+                amount: $scope.totalPrice*100,
+                name: "Packnation",
+                prefill: {email: $scope.user.email, contact: $scope.user.billing_address.phone, name:   $scope.user.username},
+                theme: {color: '#F37254'}
+            }
+
+            var successCallback = function(payment_id) {
+                console.log('payment_id: ' + payment_id);
+                BasketData.sendOrder('razorPay', true,payment_id).then(
+                    function(response) {
+                        console.log("response : " + JSON.stringify(response));
+                        $scope.order = response.data.order;
+                        BasketData.emptyBasket();
+                          $rootScope.$broadcast('loading:hide');
+
+                          $ionicHistory.clearHistory();
+                          $ionicHistory.nextViewOptions({
+                            disableAnimate: true,
+                            disableBack: true
+                          });
+                          $scope.paid=true;
+                    },
+                    function(response) {
+                        console.error("Error: order request could not be sent.", response);
+                        BasketData.broadcast('Product order','Hi Product not available.','OK','button-positive');
+                        BasketData.emptyBasket();
+                        $rootScope.$broadcast('loading:hide');
+                    });
+            }
+
+            var cancelCallback = function(error) {
+                BasketData.broadcast('Payment not recceived','Payment not received, please again later.','OK','button-positive');
+            }
+
+            RazorpayCheckout.open(options, successCallback, cancelCallback);
+        }
 
         $ionicModal.fromTemplateUrl('templates/stripe-modal.html', function(modal) {
             $scope.stripeModal = modal;

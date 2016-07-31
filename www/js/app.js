@@ -102,17 +102,6 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
-
-    .state('app.product', {
-        url: "/products/:product_id",
-        views: {
-            'menuContent': {
-                templateUrl: "templates/product.html",
-                controller: 'ProductCtrl'
-            }
-        }
-    })
-
     .state('app.categories', {
         url: "/categories",
         views: {
@@ -199,6 +188,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
+    .state('app.product', {
+        url: "/products/:product_id",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/product.html",
+                controller: 'ProductCtrl'
+            }
+        }
+    })
     .state('app.about', {
         url: "/about",
         views: {
@@ -209,6 +207,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
     });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
-  //$urlRouterProvider.otherwise('/app/neftPayment');
+//    $urlRouterProvider.otherwise('/app/products/'+8121);
+  $urlRouterProvider.otherwise('/app/home');
+  //$location.path('/app/products/'+8121);
 });
