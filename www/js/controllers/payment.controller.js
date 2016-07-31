@@ -87,6 +87,7 @@
             return $scope.paid;
         };
         $scope.payViaRazorpay = function(){
+          var customer = $scope.user.customer;
           $scope.paid=false;
             var options = {
                 description: 'Please check cart your amount before pay.',
@@ -95,7 +96,7 @@
                 key: 'rzp_live_Jta8q6CBITnSIc',
                 amount: $scope.totalPrice*100,
                 name: "Packnation",
-                prefill: {email: $scope.user.email, contact: $scope.user.billing_address.phone, name:   $scope.user.username},
+                prefill: {email: customer.email, contact: customer.billing_address.phone, name:customer.username},
                 theme: {color: '#F37254'}
             }
 
