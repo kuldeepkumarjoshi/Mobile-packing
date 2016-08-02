@@ -432,7 +432,14 @@ angular.module('woocommerce-api.controllers', [])
     $scope.billing_address = {};
     $scope.shipping_address = {};
     $scope.customer.edit = true;
+    if($window.localStorage['user']){
+      $scope.customer =    JSON.parse($window.localStorage['user']).customer;
+      $scope.billing_address = $scope.customer.billing_address;
+      $scope.shipping_address = $scope.customer.shipping_address;
+      $scope.customer.edit = false;
+       $scope.isLogedIn = true;
 
+      }
     $scope.createCustomer = function() {
       $rootScope.$broadcast('loading:show');
         var data = {

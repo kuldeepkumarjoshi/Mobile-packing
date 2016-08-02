@@ -10,7 +10,8 @@ angular.module('woocommerce-api.data', [])
         icon: 'ion-tshirt',
         note: 'Our Products',
         url: '#/app/products'
-    }, {
+    },
+     {
         title: 'Categories (Cards)',
         icon: 'ion-bag',
         note: 'Our Product Categories',
@@ -20,7 +21,8 @@ angular.module('woocommerce-api.data', [])
         icon: 'ion-bag',
         note: 'Our Product Categories',
         url: '#/app/categories'
-    }, {
+    },
+     {
         title: 'New Customer',
         icon: 'ion-person-add',
         note: 'Register',
@@ -41,19 +43,21 @@ angular.module('woocommerce-api.data', [])
         title: 'Products',
         icon: 'ion-tshirt',
         url: '#/app/products'
-    }, {
-        title: 'Categories (Cards)',
-        icon: 'ion-bag',
-        url: '#/app/categories-cards'
-    }, {
-        title: 'Categories',
-        icon: 'ion-bag',
-        url: '#/app/categories'
-    }, {
-        title: 'New Customer',
-        icon: 'ion-person-add',
-        url: '#/app/newCustomer'
-    }, {
+    },{
+          title: 'My order',
+          icon: 'ion-bag',
+          url: '#/app/orders'
+    },
+    //  {
+    //     title: 'Categories (Cards)',
+    //     icon: 'ion-bag',
+    //     url: '#/app/categories-cards'
+    // }, {
+    //     title: 'Categories',
+    //     icon: 'ion-bag',
+    //     url: '#/app/categories'
+    // },
+   {
         title: 'About',
         icon: 'ion-grid',
         url: '#/app/about'
@@ -557,7 +561,7 @@ angular.module('woocommerce-api.data', [])
         }).then(
             function(result) {
                 if (result.data.customer)
-                    user_data = result.data.customer;
+                    user_data = result.data;
 
                 deferred.resolve(result.data);
             },

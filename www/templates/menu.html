@@ -17,9 +17,14 @@
                     <i class="icon {{item.icon}}"></i> {{item.title}}
                 </ion-item>
             </ion-list>
-            <ion-item style="text-align:center;" ng-click="actionLogin()">
-
-                <i class="icon loginIcon ion-power"></i><br/>
+            <ion-item ng-if="isLogedIn" nav-clear menu-close href="#/app/newCustomer">
+                <i class="icon ion-person"></i>  My Profile
+            </ion-item>
+            <ion-item ng-if="!isLogedIn" nav-clear menu-close href="#/app/newCustomer">
+                <i class="icon ion-person-add"></i>  Sign up
+            </ion-item>
+            <ion-item nav-clear menu-close  ng-click="actionLogin()">
+                <i class="icon ion-power"></i>
                 <span ng-if="isLogedIn">Logout</span>
                 <span ng-if="!isLogedIn">Login</span>
             </ion-item>

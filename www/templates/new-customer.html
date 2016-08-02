@@ -1,5 +1,4 @@
-<ion-view title="New Customer">
-	<ion-nav-title>New Customer</ion-nav-title> 
+<ion-view>
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
@@ -7,12 +6,23 @@
         <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
 
-    <ion-content class="has-header padding">
-
+		<ion-header-bar ng-show="!customer.edit" class="row bar-subheader bar-positive">
+			<div class="button title col col-50"  ui-sref="app.products">
+				<i style="vertical-align: baseline;" class="icon ion-bag"></i> Shopping
+			</div>
+			<div class="button title col col-50" style="border-right:#106bc5;border-width: 1px;border-style: solid;top:0px;"
+					 ui-sref="app.basket">
+				<i style="vertical-align: baseline;" class="icon ion-ios-cart"></i> View Cart
+			</div>
+    </ion-header-bar>
+		<ion-header-bar ng-show="customer.edit" class="row bar-subheader bar-positive">
+			<div class="title">
+				<i class="icon ion-ios-cart"></i> New Customer
+			</div>
+    </ion-header-bar>
+    <ion-content class="has-header padding has-footer" style="    padding-top:44px;">
 		<div class="list">
-
 			<form name="customerForm" novalidate ng-show="customer.edit">
-
 				<div class="item item-divider">
 				Personal Information*
 				</div>
@@ -157,24 +167,11 @@
 				<span class="input-label">Country:</span>
 				<input ng-model="shipping_address.country" type="text">
 				</label>
-
-				<button class="button button-block button-positive" ng-click="createCustomer()" ng-disabled="customerForm.$invalid">
-				Create Customer
-				</button>
-						
 			</form>
 
 		</div>
 
 		<div class="list" ng-show="!customer.edit">
-
-			<button class="button button-block button-stable" ui-sref="app.products">
-			<i class="icon ion-bag"></i> Continue Shopping
-			</button>
-
-			<button class="button button-block button-dark" ui-sref="app.basket">
-			<i class="icon ion-ios-cart"></i> View Cart
-			</button>
 
 			<div class="item item-divider">
 			Personal Information
@@ -308,8 +305,13 @@
 			<span class="input-label">Country:</span>
 			{{shipping_address.country}}
 			</label>
-					
+
 		</div>
 
     </ion-content>
+		<ion-footer-bar ng-show="customer.edit" class="bar-positive" ng-click="checkoutRedirect()" ng-click="createCustomer()" ng-disabled="customerForm.$invalid">
+					 <div  class="title button">
+						Create Customer
+						</div>
+		</ion-footer-bar>
 </ion-view>

@@ -1,13 +1,17 @@
-<ion-view title="Order Address">
-	<ion-nav-title>Order Address</ion-nav-title>
+<ion-view>
+
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
-
-    <ion-content class="has-header padding">
+		<ion-header-bar class="row bar-subheader bar-positive" ng-if="!isLogedIn">
+				<a class="title button col col-50"  href="#/app/newCustomer">  <i style="vertical-align: baseline;" class="icon ion-person-add"></i>  Sign up</a>
+				<div class="title button col col-50" style="border-right:#106bc5;border-width: 1px;border-style: solid;top:0px;"
+						ng-click="actionLogin()">  <i style="vertical-align: baseline;" class="icon ion-power"></i> Login</div>
+		</ion-header-bar>
+    <ion-content class="has-header has-footer padding">
 
 		<div class="list">
 			<form name="customerForm" novalidate>
@@ -93,10 +97,12 @@
 				<span class="input-label">Phone:</span>
 				<input ng-model="billing_address.phone" type="text">
 				</label>
-				<button class="button button-block button-positive" ng-click="checkoutRedirect()" ng-disabled="customerForm.$invalid">
-  				Continue to checkout
-				</button>
 			</form>
 		</div>
     </ion-content>
+		<ion-footer-bar class="bar-positive" ng-click="checkoutRedirect()">
+					 <div  class="title button">
+							Confirm Address
+						</div>
+		</ion-footer-bar>
 </ion-view>

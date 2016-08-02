@@ -1,4 +1,4 @@
-<ion-view title="Payment">
+<ion-view>
     <ion-nav-bar class="bar-stable nav-title-slide-ios7">
         <ion-nav-back-button class="button-clear"><i class="icon ion-ios-arrow-back"></i></i> Back</ion-nav-back-button>
     </ion-nav-bar>
@@ -8,7 +8,10 @@
     <ion-nav-buttons side="right">
         <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
-    <ion-content class="has-header">
+    <ion-header-bar class="row bar-subheader bar-positive">
+         <h1 class="title">Payment</h1>
+    </ion-header-bar>
+    <ion-content class="has-header has-footer">
         <div class="card" ng-repeat="product in basketProducts">
           <div class="card-content">
                <div class="text-right product-price">
@@ -24,13 +27,12 @@
            </div>
        </div>
         </div>
-        <div ng-show="!isPaid()">
+        <!-- <div ng-show="!isPaid()">
           <div class="padding">
             <button class="button button-block button-positive"  disabled ng-if='!canPay()'>NEFT Payment</button>
             <button class="button button-block button-positive" ng-click="neft_Payment()" ng-if='canPay()'>NEFT Payment</button>
-              <!-- <button class="button button-block button-positive" ng-click="payViaSite()" disabled ng-if='!canPay()'>Pay via Site</button>
-              <button class="button button-block button-positive" ng-click="payViaSite()" ng-if='canPay()'>Pay via Site</button> -->
-          </div>
+               <button class="button button-block button-positive" ng-click="payViaSite()" disabled ng-if='!canPay()'>Pay via Site</button>
+              <button class="button button-block button-positive" ng-click="payViaSite()" ng-if='canPay()'>Pay via Site</button>
           <div class="item-divider padding">
                   <div class="text-center">
                       <button class='button button-block button-positive' disabled ng-if='!canPay()' >
@@ -42,7 +44,7 @@
                   </div>
             </div>
 
-            <div class="item item-divider">                Customer            </div>
+             <div class="item item-divider">                Customer            </div>
             <label class="item item-input" ng-show="!isLogedIn">
                 <span class="input-label">E-mail</span>
                 <input type="email" ng-model="email.addr" ng-change="evaluateEmail()" ng-model-options="{debounce: 750}" placeholder="Enter your Customer E-mail">
@@ -66,7 +68,7 @@
             </div>
 
 
-            <!-- <div class="item-divider padding">
+           <div class="item-divider padding">
                     <div class="text-center">
                         <button class='button button-block button-positive' disabled ng-if='!canPay()' ng-click="payViaPaypal()">
                             <i class="icon ion-card"> Pay via PayPal</i>
@@ -83,8 +85,8 @@
                             <i class="icon ion-ios-cart"> Pay via Stripe</i>
                         </button>
                     </div>
-                  </div> -->
-        </div>
+                  </div>
+        </div> -->
         <div ng-show="isPaid()">
             <p class='item item-text-wrap'>
                 <i class="icon ion-checkmark"> Your <strong>Order has been received</strong> and the <strong>Payment was successful</strong>.</i>
@@ -92,4 +94,18 @@
             </p>
         </div>
     </ion-content>
-  </ion-view>
+    <ion-footer-bar class="row bar-positive" ng-show="!isPaid()">
+        <div class="title button col col-50" >
+          <button class="disableBtn" disabled ng-if='!canPay()'>NEFT Payment</button>
+          <button  ng-click="neft_Payment()" ng-if='canPay()'>NEFT Payment</button>
+         </div>
+        <div class="title button col col-50"  ng-click="actionLogin()" style="border-right:#106bc5;border-width: 1px;border-style: solid;top:0px;">
+          <button class="disableBtn"  disabled ng-if='!canPay()' >
+              <i class="icon ion-card"> Pay via razorpay</i>
+          </button>
+          <button ng-if='canPay()' ng-click="payViaRazorpay()">
+              <i class="icon ion-card"> Pay via razorpay</i>
+          </button>
+        </div>
+    </ion-footer-bar>
+</ion-view>

@@ -18,7 +18,7 @@ $rootScope.$broadcast('loading:show');
   if($rootScope.cat != null){
     $scope.isEmptyData = false;
       $scope.categories =angular.copy($rootScope.cat);
-      $scope.categories.children.push({name:$scope.categories.name,count:$scope.categories.count,slug:"viewAll",slug2:$scope.categories.slug});
+      //$scope.categories.children.push({name:$scope.categories.name,count:$scope.categories.count,slug:"viewAll",slug2:$scope.categories.slug});
   }
 $rootScope.$broadcast('loading:hide');
 console.log(  $scope.categories);

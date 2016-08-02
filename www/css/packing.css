@@ -2,6 +2,18 @@
   font-size: 83px;
   color: green;
 }
+.disableBtn{
+  background-color: transparent;
+border: none;
+font-size: 17px !important;
+color: rgba(218, 229, 236, 0.61);
+}
+.btnBreak{
+  border-right:#106bc5;
+  border-width: 1px;
+  border-style: solid;
+  top:0px;
+}
 .loginIcon{
   font-size: 60px;
 }

@@ -76,7 +76,7 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
                    $window.localStorage['user'] =JSON.stringify($scope.user);
                     console.log($scope.user);
                     $rootScope.$broadcast('loading:hide');
-                   $window.location.reload(true);
+                    //$window.location.reload(true);
                   }
                     //$state.go($state.current, {}, {reload: true});
                      return;

@@ -1,15 +1,19 @@
-<ion-view title="Categories">
+<ion-view>
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
+    <ion-header-bar class="bar-subheader bar-positive" ng-show="categories.count" ng-click="moveToProduct(categories)">
+            <h1 class="title">{{categories.name}}</h1>
+    </ion-header-bar>
     <ion-content class="has-header">
 <!-- child only --><div  ng-if="categories.count > 1"   >
+
           <div class="row" ng-repeat="row in categories.children | partition:2"  >
             <div  class="col"  ng-repeat="subCat in row">
-              <div class="card-content categoryBox" style="background-image:url(images/{{subCat.slug}}.jpg);"
+                <div class="card-content categoryBox" style="background-image:url(images/{{subCat.slug}}.jpg);"
                       ng-click="moveToProduct(subCat)">
                     <div >
                       {{subCat.name}}

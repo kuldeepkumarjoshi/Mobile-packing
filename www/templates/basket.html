@@ -1,4 +1,4 @@
-<ion-view title="Cart">
+<ion-view>
     <ion-nav-bar class="bar-stable nav-title-slide-ios7">
         <ion-nav-back-button class="button-clear"><i class="icon ion-ios-arrow-back"></i></i> Back</ion-nav-back-button>
     </ion-nav-bar>
@@ -8,6 +8,9 @@
     <ion-nav-buttons side="right">
         <a class="button button-clear"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
+    <ion-header-bar class="bar-subheader bar-positive">
+          <h1 class="title">Cart</h1>
+    </ion-header-bar>
     <ion-content class="has-header">
         <div ng-show="!cartItems" class="text-center padding">You cart is empty.</div>
         <div class="card" ng-show="cartItems" ng-repeat="product in basketProducts">
@@ -37,7 +40,6 @@
                 </button>
               </div>
             </div>
-
         </div>
         <div class='item item-divider' ng-if="cartItems">
             <div class='row' ng-show="discountAmount">
@@ -53,17 +55,15 @@
                 <div  class="col col-33 text-right"><b>{{totalPriceHtml}}</b></div>
             </div>
         </div>
-        <div class='item item-divider' ng-if="cartItems">
-            <div class='row'>
-                <button class='button button button-positive col' ng-click="proceedToOrder()">
-                    <i class="icon ion-ios-cart"></i> Proceed to Order
-                </button>
-            </div>
-        </div>
         <div class='item' ng-if="cartItems">
             <div class='text-right'>
                 <button class='button button-small' ng-click="emptyBasket()" style="float:right;"><i class="icon ion-trash-a"></i> Empty Cart</button>
             </div>
         </div>
     </ion-content>
+    <ion-footer-bar ng-show="cartItems" class="bar-positive" ng-click="proceedToOrder()">
+           <h1 class="title">
+              <i class="icon ion-ios-cart"></i> Proceed to checkout
+            </h1>
+    </ion-footer-bar>
 </ion-view>

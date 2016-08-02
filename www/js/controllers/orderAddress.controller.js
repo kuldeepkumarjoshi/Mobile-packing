@@ -3,7 +3,7 @@
 
     angular.module('woocommerce-api.controllers')
 
-    .controller('OrderAddressCtrl', function($scope, $window, BasketData) {
+    .controller('OrderAddressCtrl', function($scope,$state, $window, BasketData) {
       $scope.addressData = [];
       $scope.shipping_address = {};
       $scope.billing_address = {};

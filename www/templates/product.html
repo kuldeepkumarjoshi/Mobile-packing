@@ -1,5 +1,4 @@
-<ion-view view-title='Product'>
-    <ion-nav-title style="width: 129px;">{{product.title}}</ion-nav-title>
+<ion-view>
     <ion-nav-bar class="bar-stable nav-title-slide-ios7">
     <ion-nav-back-button class="button-clear"><i class="icon ion-ios-arrow-back"></i></i> Back</ion-nav-back-button>
     </ion-nav-bar>
@@ -11,13 +10,15 @@
             <button ui-sref="app.basket" class="button no-animation button-icon icon" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i>
             </button>
 
-            <button ng-click="shareProduct()" class="button no-animation button-icon icon ion-share" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-            </button>
+            <!-- <button ng-click="shareProduct()" class="button no-animation button-icon icon ion-share" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+            </button> -->
         </div>
     </ion-nav-buttons>
 
-
-    <ion-content class="has-header">
+    <ion-header-bar class="bar-subheader bar-positive">
+          <h1 class="title">{{product.title}}</h1>
+    </ion-header-bar>
+    <ion-content class="has-header has-footer">
         <div class="list card">
             <div class="item item-divider">
                 <ion-slide-box on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true">
@@ -26,12 +27,7 @@
                     </ion-slide>
                 </ion-slide-box>
             </div>
-            <div class="item tabs subdued">
-                <a class="tab-item" ng-repeat="cat in product.categories" href="#/app/categories/{{getSlugByName(cat)}}/{{cat}}">
-                    {{cat}}
-                </a>
-            </div>
-            <div class="item item-text-wrap">
+            <!-- <div class="item item-text-wrap">
                 <div ng-bind-html="product.description"></div>
                 <div class='row'>
                     <div class="col text-left">
@@ -41,7 +37,7 @@
                         <wc-rating rating='product.average_rating' />
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="item" style="padding:0px;" ng-if="tableData">
               <div class="card">
                 <div class="item item-divider">
@@ -56,7 +52,7 @@
             </div>
             <div class="item" style="padding:0px;" ng-if="inStock">
                 <div class="row">
-                    <div class="col" style="padding-top:6%;">Quantity:</div>
+                    <div class="col" style="padding-top:6%;"><b>Quantity:</b></div>
 
                     <div class="row">
                         <div class="col" style="    margin-left: 29%;">
@@ -88,24 +84,34 @@
             </div>
             <div class="item" ng-if="inStock">
               <div style=" display:inline-block;" ng-if="product.stock_quantity">
-                  <span>Stock Quantity: <b>{{product.stock_quantity}}</b></span>
+                  <span><b>Stock Quantity: </b> {{product.stock_quantity}}</span>
               </div>
             </div>
-            <div class="item item-divider ">
+
+            <div class="item" ng-if="inStock">
+              <div style=" display:inline-block;">
+                  <span><b>Description:</b></span>
+                   <div class="row"><span class="col col-33">Category :</span></div>
+                    <div class="row">
+                      <a class="tab-item col" ng-repeat="cat in product.categories" href="#/app/categories/{{getSlugByName(cat)}}/{{cat}}">
+                          {{cat}}
+                      </a>
+                  </div>
+                  <div ng-bind-html="product.short_description"></div>
+              </div>
+            </div>
+            </div>
+            <!-- <div class="item item-divider ">
                 <div class='row'>
-                    <div class="col text-left">
-                        <button class='button button-positive' ng-click="toBasket()" ng-if="product" ng-disabled="!inStock">
-                            <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="inStock ">Add To Cart</span><span ng-if="!inStock">Out of stock</span>
-                        </button>
-                    </div>
-                    <!-- <div class="col text-right">
+
+                   <div class="col text-right">
                         <div style='vertical-align: middle; margin-top: 16px; margin-right: 8px'>
                             <i class="icon ion-pricetag"></i>
                             <span class='product-price' ng-bind-html="product.price_html"></span>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Reviews -->
              <!-- <div class="list" ng-if="reviews">
@@ -127,4 +133,12 @@
 
         </div>
     </ion-content>
+    <ion-footer-bar class="bar-positive">
+        <div ng-click="toBasket()" ng-if="product" ng-disabled="!inStock">
+           <h1 class="title">
+             <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="inStock ">Add To Cart</span>
+             <span ng-if="!inStock">Out of stock</span>
+            </h1>
+        </div>
+    </ion-footer-bar>
 </ion-view>
