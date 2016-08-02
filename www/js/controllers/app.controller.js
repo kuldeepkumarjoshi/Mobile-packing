@@ -10,10 +10,6 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
         var cartItems = BasketData.getBasket();
         $scope.cartItems = cartItems.length;
 
-        var email_regex = RegExp(["[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*",
-            "+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]",
-            "(?:[a-z0-9-]*[a-z0-9])?"
-        ].join(''));
 
         $scope.$on('basket', function(event, args) {
             cartItems = BasketData.getBasket();
@@ -25,18 +21,20 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
 
       // An elaborate, custom popup
       var myPopup = $ionicPopup.show({
-        template: '<input type="text" placeholder="Please enter your email" ng-change="changeEmail()" ng-model="data.email"><br/><div style="color:red;">{{validationMsg}}</div>',
+        template: '<input type="text" placeholder="Username"  ng-model="data.username"><br/>'
+                  +'<input type="password" placeholder="Password"  ng-model="data.password"><br/>'
+                  +'<div style="color:red;" ng-bind-html="validationMsg"></div>',
         title: ' Login',
         subTitle: '',
         scope: $scope,
         buttons: [
           { text: 'Cancel' },
           {
-            text: '<b>Save</b>',
+            text: '<b>Login</b>',
             type: 'button-positive',
             onTap: function(e) {
-              if ($scope.data.email) {
-              $scope.evaluateEmail(e);
+              if ($scope.data.username && $scope.data.password ) {
+              $scope.loginUser(e);
               } else {
                   e.preventDefault();
               }
@@ -46,7 +44,7 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
       });
 
       myPopup.then(function(res) {
-        if(!$scope.emailVerified){
+        if(!$scope.isLogedIn){
           myPopup.show();
         }
         console.log('Tapped!', res);
@@ -64,38 +62,31 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
           }
          };
 
-         $scope.changeEmail = function(){
-            $scope.emailVerified =true;
-           $scope.validationMsg ='';
-         };
-         $scope.evaluateEmail = function(e) {
-             var valid = email_regex.test($scope.data.email);
-
-             if (valid) {
+         $scope.loginUser = function(e) {
                  $rootScope.$broadcast('loading:show');
-                 UserData.check($scope.data.email).then(function(user) {
-                     $scope.emailVerified = true;
-                     $scope.user = user;
-                     $scope.isLogedIn = true;
-                    $window.localStorage['user'] =JSON.stringify($scope.user);
-                     console.log(user);
+                 console.log($scope.data);
+                 UserData.loginUser($scope.data).then(function(response) {
+                   if(response.errors !=null && response.errors.length>0){
+                      $scope.validationMsg =response.errors[0].message;
                      $rootScope.$broadcast('loading:hide');
-                    $window.location.reload(true);
+                     e.preventDefault();
+                  }else{
+                    $scope.user = response;
+                    $scope.isLogedIn = true;
+                   $window.localStorage['user'] =JSON.stringify($scope.user);
+                    console.log($scope.user);
+                    $rootScope.$broadcast('loading:hide');
+                   $window.location.reload(true);
+                  }
                     //$state.go($state.current, {}, {reload: true});
                      return;
                  }, function() {
-                     $scope.emailVerified = false;
+
                      $scope.validationMsg = "Account does not exists with this email.";
 
                      $rootScope.$broadcast('loading:hide');
                      e.preventDefault();
                  });
-             } else {
-                 $scope.emailVerified = false;
-                 $scope.validationMsg = "Please provide correct email address.";
-                 $scope.user = null;
-                e.preventDefault();
-             }
              e.preventDefault();
          };
 

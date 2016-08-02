@@ -262,6 +262,7 @@ angular.module('woocommerce-api.controllers', [])
 .controller('BasketCtrl', function($rootScope,CartData, $scope, $state, $sce, BasketData, MetaData) {
 
   $scope.meta = {};
+  $scope.helperData = {};
   $scope.basketProducts = BasketData.getBasket();
   console.log($scope.basketProducts);
 
@@ -331,14 +332,63 @@ angular.module('woocommerce-api.controllers', [])
         $scope.basketProducts = [];
         BasketData.emptyBasket();
     };
+    $scope.applyCoupon = function(){
+      $rootScope.$broadcast('loading:show');
+    var cart =  CartData.generateSessionCart(BasketData.getBasket());
+    console.log(cart);
 
+    var cartItems = {
+      basketData : cart,
+      couponCode : $scope.helperData.couponCode
+    };
+    CartData.addToCart(cartItems).then(
+      function(response){
+        if(response.data){
+          console.log("response");
+          console.log(response);
+          BasketData.emptyBasket();
+          var basketItems = angular.copy(response.data.cartItems);
+          var totalCartValue = angular.copy(response.data.totalCartValue);
+          $scope.oldTotalPriceHtml=0;
+          angular.forEach(basketItems, function(item, key) {
+            var cartProduct = [];
+              cartProduct = BasketData.getProductIdCartMap(item.product_id);
+              cartProduct['price']= item.data.price;
+              cartProduct['quantity']= item.quantity;
+              cartProduct['variation']= item.variation;
+              $scope.oldTotalPriceHtml = $scope.oldTotalPriceHtml + (item.line_subtotal+item.line_subtotal_tax);
+            BasketData.add(cartProduct);
+            $scope.helperData.couponCode='';
+          });
+          $scope.basketProducts = BasketData.getBasket();
+          $scope.cartItems = $scope.basketProducts.length;
+          BasketData.setTotalBasketValue(totalCartValue);
+          $scope.oldTotalPriceHtml=  $scope.oldTotalPriceHtml.toFixed(2);
+          BasketData.setDiscountAmount($scope.meta.currency_format + response.data.discountAmount);
+          $scope.discountAmount =$scope.meta.currency_format + response.data.discountAmount.toFixed(2) ;
+          if ($scope.basketProducts.length > 0) {
+              var total_price = BasketData.getTotal();
+            $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
+            $scope.totalPrice = total_price.toFixed(2) ;
+          }else{
+                $scope.totalPriceHtml = '0';
+                $scope.totalPrice = 0;
+          }
+            $rootScope.$broadcast('loading:hide');
+            BasketData.broadcast('Coupon status',response.data.couponStatus,'OK','button-positive');
+        }
+      });
+    }
     $scope.removeProduct = function(id) {
       $rootScope.$broadcast('loading:show');
     var cart =  CartData.generateSessionCart(BasketData.getBasket());
     var product = _.find(cart, { id: parseInt(id) });
     cart.splice(cart.indexOf(product), 1);
     console.log(cart);
-    CartData.addToCart(cart).then(
+    var cartItems = {
+      basketData : cart,
+    };
+    CartData.addToCart(cartItems).then(
       function(response){
         if(response.data){
           console.log("response");
@@ -372,7 +422,7 @@ angular.module('woocommerce-api.controllers', [])
     };
 
     $scope.proceedToOrder = function() {
-        $state.go('app.payment');
+        $state.go('app.orderAddress');
     };
 })
 // New Customer Controller
@@ -435,8 +485,6 @@ angular.module('woocommerce-api.controllers', [])
                 title: 'Success',
                 template: 'Customer created successfully'
             });
-
-
         }, function(result) {
             console.log(result)
               $rootScope.$broadcast('loading:hide');
@@ -444,7 +492,6 @@ angular.module('woocommerce-api.controllers', [])
                 title: 'Registration Error',
                 template: result.data.errors[0].message
             });
-
         });
 
     }

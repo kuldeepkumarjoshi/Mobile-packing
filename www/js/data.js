@@ -121,7 +121,7 @@ angular.module('woocommerce-api.data', [])
       return deferred.promise;
   };
 
-  service.addToCart = function(cart) {
+  service.addToCart = function(cartItems) {
       var deferred = $q.defer();
       var params = {};
 
@@ -134,7 +134,7 @@ angular.module('woocommerce-api.data', [])
           headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
           },
-          data: cart
+          data: cartItems
 
       }).then(
           function(result) {
@@ -351,7 +351,10 @@ angular.module('woocommerce-api.data', [])
     var basket = [];
     var service = {};
     var totalBasketValue='';
+    var discountAmount='';
     var productIdCartMap =[];
+    var billing_address = '';
+    var shipping_address ='';
  /*
     Payment Options:
         Direct Bank Transfer:   bacs
@@ -377,6 +380,7 @@ angular.module('woocommerce-api.data', [])
     service.getProductIdCartMap = function(key){
       return productIdCartMap[key];
     }
+
     service.add = function(product) {
       //  var index = _.indexOf(basket, product);
         // If product is already in the basket, increase quantity
@@ -402,6 +406,12 @@ angular.module('woocommerce-api.data', [])
     service.getTotalBasketValue = function(){
         return totalBasketValue ;
     }
+    service.setDiscountAmount = function(discountAmountValue){
+      discountAmount = discountAmountValue;
+    }
+    service.getDiscountAmount = function(){
+        return discountAmount ;
+    }
     service.emptyBasket = function() {
         basket = [];
         $rootScope.$broadcast('basket');
@@ -424,10 +434,6 @@ angular.module('woocommerce-api.data', [])
              if (product.variation && product.variation.length>0) {
                  variations['pa_' + product.variation.attributes[0].slug] = product.variation.attributes[0].option;
              }
-
-
-
-
              if (!_.isEmpty(variations)) {
 
                  order_json['variations'] = variations;
@@ -463,16 +469,18 @@ angular.module('woocommerce-api.data', [])
     service.sendOrder = function(method, paid,transactionId) {
         var deferred = $q.defer();
         var params = {};
-
         var url = generateQuery('POST', '/orders', CONFIG, params);
-
         var customer = UserData.getUserData();
         if(!customer){
           customer =  JSON.parse($window.localStorage['user']).customer;
         }
-
         console.warn("Customer Data:", JSON.stringify(customer));
-
+        if(_.isEmpty(billing_address)){
+            billing_address = customer.billing_address;
+        }
+        if(_.isEmpty(shipping_address)){
+            shipping_address = customer.shipping_address;
+        }
         var order_data = {
             'order': {
                 customer_id: customer.id,
@@ -480,8 +488,8 @@ angular.module('woocommerce-api.data', [])
                 // Fetched from customer data if they exist,
                 // if they don't and the request is to be completed in-app
                 // the user should be prompted.
-                shipping_address: customer.shipping_address,
-                billing_address: customer.billing_address,
+                shipping_address: shipping_address,
+                billing_address: billing_address,
                 note:'mobile-app'
             }
         };
@@ -501,7 +509,7 @@ angular.module('woocommerce-api.data', [])
         $http({
             method: 'POST',
             url: url,
-            timeout:20000,
+            timeout:CONFIG.request_timeout,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -530,6 +538,36 @@ angular.module('woocommerce-api.data', [])
     var service = {};
     var user_data = null;
     var orders = [];
+
+    service.loginUser = function(user) {
+        console.log('login user');
+        console.log(user);
+        var deferred = $q.defer();
+        var params = {};
+        var url = generateQuery('POST', '/custom/loginAuthentication', CONFIG, params);
+
+        $http({
+            method: 'POST',
+            url: url,
+            timeout: CONFIG.request_timeout,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: user
+        }).then(
+            function(result) {
+                if (result.data.customer)
+                    user_data = result.data.customer;
+
+                deferred.resolve(result.data);
+            },
+            function(result) {
+                deferred.reject(result.data);
+            }
+        );
+
+        return deferred.promise;
+    };
 
     service.check = function(email) {
         var deferred = $q.defer();

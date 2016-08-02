@@ -28,15 +28,36 @@
         </div>
         <div class='item item-divider' ng-if="cartItems">
             <div class='row'>
+              <div class="col col-50">
+                <input name="couponCode" type="text" style="width:100%;" placeholder=" Enter coupon code" ng-model="helperData.couponCode">
+              </div>
+              <div class="col col-33">
+                <button class='button button-small button-positive col' style="font-size:17px;" ng-click="applyCoupon()">
+                     Apply
+                </button>
+              </div>
+            </div>
+
+        </div>
+        <div class='item item-divider' ng-if="cartItems">
+            <div class='row' ng-show="discountAmount">
+                <div  class="col col-75 text-right"> Sub-total:</div>
+                <div  class="col col-33 text-right">{{oldTotalPriceHtml}}</div>
+            </div>
+            <div class='row' ng-show="discountAmount">
+                <div  class="col col-75 text-right"> Discount:</div>
+                <div  class="col col-33 text-right">-{{discountAmount}}</div>
+            </div>
+            <div class='row'>
+                <div  class="col col-75 text-right"> <b>Total:</b></div>
+                <div  class="col col-33 text-right"><b>{{totalPriceHtml}}</b></div>
+            </div>
+        </div>
+        <div class='item item-divider' ng-if="cartItems">
+            <div class='row'>
                 <button class='button button button-positive col' ng-click="proceedToOrder()">
                     <i class="icon ion-ios-cart"></i> Proceed to Order
                 </button>
-                <div class="col text-right">
-                    <div>
-                        <span> Total:  </span>
-                        <b> {{totalPriceHtml}}</b>
-                    </div>
-                </div>
             </div>
         </div>
         <div class='item' ng-if="cartItems">

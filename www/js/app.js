@@ -179,6 +179,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
+    .state('app.orderAddress', {
+        url: "/orderAddress",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/orderAddress.html",
+                controller: 'OrderAddressCtrl'
+            }
+        }
+    })
     .state('app.neftPayment', {
         url: "/neftPayment",
         views: {
@@ -205,9 +214,9 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     });
-
+    $urlRouterProvider.otherwise('/app/orderAddress');
     // if none of the above states are matched, use this as the fallback
-//    $urlRouterProvider.otherwise('/app/products/'+8121);
-  $urlRouterProvider.otherwise('/app/home');
+  //  $urlRouterProvider.otherwise('/app/products/'+8121);
+//  $urlRouterProvider.otherwise('/app/home');
   //$location.path('/app/products/'+8121);
 });

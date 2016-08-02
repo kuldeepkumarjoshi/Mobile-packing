@@ -73,7 +73,10 @@
           cart.push(addToCartProduct);
           console.log(cart);
           BasketData.putProductIdCartMap($scope.product.id,$scope.product);
-          CartData.addToCart(cart).then(
+          var cartItems = {
+            basketData : cart,
+          };
+          CartData.addToCart(cartItems).then(
             function(response){
               if(response.data){
                 console.log("response");

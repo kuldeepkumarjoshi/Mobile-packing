@@ -43,11 +43,11 @@
             </div>
 
             <div class="item item-divider">                Customer            </div>
-            <label class="item item-input">
+            <label class="item item-input" ng-show="!isLogedIn">
                 <span class="input-label">E-mail</span>
                 <input type="email" ng-model="email.addr" ng-change="evaluateEmail()" ng-model-options="{debounce: 750}" placeholder="Enter your Customer E-mail">
             </label>
-            <a ng-show='!canPay()' class='item subdued text-center' ng-click='registerUser()'>Don't have an account yet?</a>
+            <a ng-show='!canPay() && !isLogedIn' class='item subdued text-center' ng-click='registerUser()'>Don't have an account yet?</a>
             <div class="card" ng-if="user">
                 <div class="item item-avatar">
                     <img ng-if="user.customer.avatar_url" src="{{user.customer.avatar_url}}" />

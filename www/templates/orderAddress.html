@@ -1,0 +1,102 @@
+<ion-view title="Order Address">
+	<ion-nav-title>Order Address</ion-nav-title>
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
+    </ion-nav-buttons>
+
+    <ion-content class="has-header padding">
+
+		<div class="list">
+			<form name="customerForm" novalidate>
+        <div class="item item-divider">
+				Shipping Address
+				</div>
+
+				<label class="item item-input">
+				<span class="input-label">Company:</span>
+				<input ng-model="shipping_address.company" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Address (1):</span>
+				<input ng-model="shipping_address.address_1" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Address (2):</span>
+				<input ng-model="shipping_address.address_2" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">City:</span>
+				<input ng-model="shipping_address.city" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">State:</span>
+				<input ng-model="shipping_address.state" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Postcode:</span>
+				<input ng-model="shipping_address.postcode" type="text">
+				</label>
+
+				<div class="row item item-divider">
+					<div class="col-33">Billing Address</div>
+					<div class="col-50 text-right">
+						<label class="toggle">
+					   <input type="checkbox" ng-model="addressData.isSameAddress" ng-change="copyAction()">
+						   <div class="track">
+						     <div class="handle"></div>
+						   </div>
+						</label>
+					</div>
+					<div class="col-20" style="margin-left: 4%;margin-top: 2%;"><b>  Copy </b></div>
+				</div>
+
+
+				<label class="item item-input">
+				<span class="input-label">Company:</span>
+				<input ng-model="billing_address.company" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Address (1):</span>
+				<input ng-model="billing_address.address_1" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Address (2):</span>
+				<input ng-model="billing_address.address_2" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">City:</span>
+				<input ng-model="billing_address.city" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">State:</span>
+				<input ng-model="billing_address.state" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Postcode:</span>
+				<input ng-model="billing_address.postcode" type="text">
+				</label>
+
+				<label class="item item-input">
+				<span class="input-label">Phone:</span>
+				<input ng-model="billing_address.phone" type="text">
+				</label>
+				<button class="button button-block button-positive" ng-click="checkoutRedirect()" ng-disabled="customerForm.$invalid">
+  				Continue to checkout
+				</button>
+			</form>
+		</div>
+    </ion-content>
+</ion-view>

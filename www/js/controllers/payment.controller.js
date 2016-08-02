@@ -41,7 +41,7 @@
               $state.go('app.neftPayment');
 
         };
-
+        $scope.isLogedIn = false;
         $scope.evaluateEmail = function() {
             var valid = email_regex.test($scope.email.addr);
 
@@ -49,6 +49,8 @@
                 UserData.check($scope.email.addr).then(function(user) {
                     $scope.emailVerified = true;
                     $scope.user = user;
+                    $scope.isLogedIn = true;
+                   $window.localStorage['user'] =JSON.stringify($scope.user);
                     console.log(user);
                 }, function() {
                     $scope.emailVerified = false;
