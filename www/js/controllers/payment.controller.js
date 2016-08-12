@@ -3,7 +3,7 @@
 
     angular.module('woocommerce-api.controllers')
 
-    .controller('PaymentCtrl', function($scope, $location, $window, UserData, BasketData ) {
+    .controller('PaymentCtrl', function($scope,$rootScope, $location, $window, UserData, BasketData ) {
 
         // Get the basket products
         $scope.basketProducts = BasketData.getBasket();
@@ -38,6 +38,7 @@
             return $scope.paid;
         };
         $scope.payViaRazorpay = function(){
+            $rootScope.$broadcast('loading:show');
           if(!$scope.canPay()){
             return ;
           }
@@ -61,17 +62,21 @@
                 prefill: {email: customer.email, contact: BasketData.billing_address.phone, name:customer.username},
                 theme: {color: '#F37254'}
             }
-
             var successCallback = function(payment_id) {
                 console.log('payment_id: ' + payment_id);
-
+                $rootScope.$broadcast('loading:hide');
                 $location.path('/app/orderSuccess').search({method : 'razorPay',paymentId:payment_id});
+
             }
             var cancelCallback = function(error) {
-                BasketData.broadcast('Payment not recceived','Payment not received, please try again later.','OK','button-positive');
+                console.log('error: ' );
+                console.log(error );
+                $rootScope.$broadcast('loading:hide');
+              BasketData.broadcast('Payment not recceived','Payment not received, please try again later.','OK','button-positive');
             }
 
             RazorpayCheckout.open(options, successCallback, cancelCallback);
+
         }
 
     })

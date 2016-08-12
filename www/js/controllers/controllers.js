@@ -2,11 +2,11 @@
 "use strict";
 angular.module('woocommerce-api.controllers', [])
 .controller('AppCtrl',AppCtrl)// Home Controller
-.controller('HomeCtrl', function($scope,$state, $rootScope, Data, UserData, MetaData,CategoriesData,CartData) {
+.controller('HomeCtrl', function($scope,$state,$location, $rootScope, Data, UserData, MetaData,CategoriesData,CartData) {
 
     $scope.items = Data.items;
 
-    $scope.index = {}; 
+    $scope.index = {};
 
     MetaData.getProperties().then(
         function(result) {
@@ -17,7 +17,11 @@ angular.module('woocommerce-api.controllers', [])
 
     $scope.moveToCategory = function(cat){
       $rootScope.cat = cat;
-      $state.go('app.subcategory');
+      if(cat.children.length == 0 && cat.count > 0 ){
+          $location.path('/app/categories/'+cat.slug+'/'+cat.name);
+      }else{
+        $state.go('app.subcategory');
+      }      
     };
     $rootScope.$broadcast('loading:show');
 

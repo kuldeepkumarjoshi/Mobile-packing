@@ -4,7 +4,7 @@
     angular.module('woocommerce-api.controllers')
 
     // Basket Controller
-    .controller('BasketCtrl', function($rootScope,CartData, $scope, $state, $sce, BasketData, MetaData) {
+    .controller('BasketCtrl', function($rootScope,CartData, $scope, $state, BasketData, MetaData) {
 
       $scope.meta = {};
       $scope.helperData = {};

@@ -10,13 +10,18 @@
         "com.paypal.cordova.mobilesdk": {
             "PACKAGE_NAME": "com.packnation.packing"
         },
+        "com.razorpay.cordova": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.packnation.packing"
         },
-        "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.packnation.packing"
-        },
         "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.packnation.packing"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.packnation.packing"
         },
         "cordova-plugin-splashscreen": {
@@ -33,10 +38,6 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.packnation.packing"
-        },
-        "com.razorpay.cordova": {
-            "PACKAGE_NAME": "com.packnation.packing"
         }
-    },
-    "dependent_plugins": {}
+    }
 }

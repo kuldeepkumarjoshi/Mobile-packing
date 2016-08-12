@@ -43,7 +43,8 @@
       }
 
 
-      sendOrderToSave2();
+      sendOrderToSave();
+
       function sendOrderToSave2(){
         $scope.order = {
           total:2500,

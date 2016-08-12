@@ -31,7 +31,7 @@ angular.module('woocommerce-api.filters', [])
         if (JSON.stringify(cachedParts) === JSON.stringify(newArr)) {
             return cachedParts;
         }
-        arrayCache.put(arrString + size, newArr);
+       arrayCache.put(arrString + size, newArr);
         return newArr;
     };
     return filter;

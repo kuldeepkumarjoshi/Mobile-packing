@@ -3,7 +3,7 @@
 
     angular.module('woocommerce-api.controllers')
 
-    .controller('OrderAddressCtrl', function($scope,$state, $window, BasketData) {
+    .controller('OrderAddressCtrl', function($scope,$state, $window, BasketData,$ionicScrollDelegate) {
       $scope.addressData = [];
       $scope.addressData.enabled =false;
       $scope.shipping_address = {};
@@ -49,9 +49,11 @@
           return false;
         }else  if(isNaN($scope.billing_address.phone)){
             $scope.errorMsg = "Phone number must be in numbers";
+             $ionicScrollDelegate.scrollBottom();
             return false;
         }else  if($scope.billing_address.phone.length != 10){
             $scope.errorMsg = "Phone number must be of 10 digits";
+             $ionicScrollDelegate.scrollBottom();
             return false;
         }
         return true;

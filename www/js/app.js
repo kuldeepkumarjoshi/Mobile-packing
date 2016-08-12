@@ -143,6 +143,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
 
     .state('app.basket', {
             url: "/basket",
+            cache: false,
             views: {
                 'menuContent': {
                     templateUrl: "templates/basket.html",
@@ -152,6 +153,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
         })
         .state('app.payment', {
             url: "/payment",
+            cache: false,
             views: {
                 'menuContent': {
                     templateUrl: "templates/payment.html",
@@ -162,6 +164,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
 
     .state('app.newCustomer', {
         url: "/newCustomer",
+        cache: false,
         views: {
             'menuContent': {
                 templateUrl: "templates/new-customer.html",
@@ -172,6 +175,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
 
 	.state('app.orders', {
         url: "/orders",
+        cache: false,
         views: {
             'menuContent': {
                 templateUrl: "templates/orders.html",
@@ -190,6 +194,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
     })
     .state('app.orderSuccess', {
         url: "/orderSuccess?method&paymentId",
+        cache: false,
         views: {
             'menuContent': {
                 templateUrl: "templates/orderSuccess.html",
