@@ -3,93 +3,53 @@
 
     angular.module('woocommerce-api.controllers')
 
-    .controller('PaymentCtrl', function($scope, $ionicModal, $state, UserData, BasketData, MetaData, CONFIG, PAYMENT_CONFIG) {
-
-        // Get meta
-        $scope.meta = {};
-        MetaData.getProperties().then(
-            function(result) {
-                $scope.store = result;
-                console.log("RESULT:", result);
-            }
-        );
+    .controller('PaymentCtrl', function($scope, $location, $window, UserData, BasketData ) {
 
         // Get the basket products
         $scope.basketProducts = BasketData.getBasket();
         $scope.paid = false;
 
-        // Email validation regex with a simplified RFC 2822 implementation
-        // which doesn't support double quotes and square brackets.
-        var email_regex = RegExp(["[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*",
-            "+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]",
-            "(?:[a-z0-9-]*[a-z0-9])?"
-        ].join(''));
+        $scope.orderSuccess = function(){
 
-        $scope.email = {
-            addr: ''
-        };
+            // var cartProduct = [];
+            //   cartProduct['id'] = 8121;
+            //   cartProduct['total'] = 5600;
+            //   cartProduct['price']= 8;
+            //   cartProduct['quantity']= 700;
+            //   cartProduct['variation']= [];
+            //   BasketData.add(cartProduct);
+            //     $state.go('app.neftPayment');
 
 
-        // Register User
-        $scope.registerUser = function() {
-            // var url = CONFIG.site_url + "/wp-login.php?action=register";
-            // window.open(url, '_blank');
-            $state.go('app.newCustomer');
-        };
+              $location.path('/app/orderSuccess').search({method : 'bacs',paymentId:''});
 
-        $scope.neft_Payment = function(){
-              $state.go('app.neftPayment');
-
-        };
-        $scope.isLogedIn = false;
-        $scope.evaluateEmail = function() {
-            var valid = email_regex.test($scope.email.addr);
-
-            if (valid) {
-                UserData.check($scope.email.addr).then(function(user) {
-                    $scope.emailVerified = true;
-                    $scope.user = user;
-                    $scope.isLogedIn = true;
-                   $window.localStorage['user'] =JSON.stringify($scope.user);
-                    console.log(user);
-                }, function() {
-                    $scope.emailVerified = false;
-                });
-            } else {
-                $scope.emailVerified = false;
-                $scope.user = null;
-            }
         };
 
         $scope.canPay = function() {
             $scope.totalPrice = BasketData.getTotal();
-            return $scope.totalPrice > 0 && $scope.emailVerified;
+            return $scope.totalPrice > 0 ;
         }
-        // Hide modal and go back to cart
-        $scope.closeModal = function() {
-            $scope.shippingAddressModal.hide();
-            $state.go('app.payment');
-        };
-        // Modal for shipping info
-        $ionicModal.fromTemplateUrl('templates/shipping-info-modal.html', function(modal) {
-            $scope.shippingAddressModal = modal;// Billing info check
-        }, {
-            scope: $scope,
-            animation: 'slide-in-up'
-        });
 
-        // Shipping Info Modal Done button
-        $scope.shippingModalAccept = function() {
-            $scope.shippingAddressModal.hide();
-            $scope.user.customer.shipping_address = $scope.shipping_address;
-            $scope.payViaPaypal();
-        };
+        if ($scope.basketProducts.length > 0) {
+            $scope.totalPriceHtml = BasketData.totalPriceHtml ;
+        }
 
         $scope.isPaid = function() {
             return $scope.paid;
         };
         $scope.payViaRazorpay = function(){
-          var customer = $scope.user.customer;
+          if(!$scope.canPay()){
+            return ;
+          }
+          var customer = {};
+          if($window.localStorage['user']){
+             customer =  JSON.parse($window.localStorage['user']).customer;
+          }else{
+            customer = {
+              email:'guest@packnation.in',
+              username:'guest'
+            }
+          }
           $scope.paid=false;
             var options = {
                 description: 'Please check cart your amount before pay.',
@@ -98,47 +58,21 @@
                 key: 'rzp_live_Jta8q6CBITnSIc',
                 amount: $scope.totalPrice*100,
                 name: "Packnation",
-                prefill: {email: customer.email, contact: customer.billing_address.phone, name:customer.username},
+                prefill: {email: customer.email, contact: BasketData.billing_address.phone, name:customer.username},
                 theme: {color: '#F37254'}
             }
 
             var successCallback = function(payment_id) {
                 console.log('payment_id: ' + payment_id);
-                BasketData.sendOrder('razorPay', true,payment_id).then(
-                    function(response) {
-                        console.log("response : " + JSON.stringify(response));
-                        $scope.order = response.data.order;
-                        BasketData.emptyBasket();
-                          $rootScope.$broadcast('loading:hide');
 
-                          $ionicHistory.clearHistory();
-                          $ionicHistory.nextViewOptions({
-                            disableAnimate: true,
-                            disableBack: true
-                          });
-                          $scope.paid=true;
-                    },
-                    function(response) {
-                        console.error("Error: order request could not be sent.", response);
-                        BasketData.broadcast('Product order','Hi Product not available.','OK','button-positive');
-                        BasketData.emptyBasket();
-                        $rootScope.$broadcast('loading:hide');
-                    });
+                $location.path('/app/orderSuccess').search({method : 'razorPay',paymentId:payment_id});
             }
-
             var cancelCallback = function(error) {
-                BasketData.broadcast('Payment not recceived','Payment not received, please again later.','OK','button-positive');
+                BasketData.broadcast('Payment not recceived','Payment not received, please try again later.','OK','button-positive');
             }
 
             RazorpayCheckout.open(options, successCallback, cancelCallback);
         }
-
-        $ionicModal.fromTemplateUrl('templates/stripe-modal.html', function(modal) {
-            $scope.stripeModal = modal;
-        }, {
-            scope: $scope,
-            animation: 'slide-in-up'
-        });
 
     })
 })();

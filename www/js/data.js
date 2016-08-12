@@ -43,11 +43,11 @@ angular.module('woocommerce-api.data', [])
         title: 'Products',
         icon: 'ion-tshirt',
         url: '#/app/products'
-    },{
-          title: 'My order',
-          icon: 'ion-bag',
-          url: '#/app/orders'
-    },
+    }, {
+       title: 'Cart',
+       icon: 'ion-ios-cart',
+       url: '#/app/basket'
+   },
     //  {
     //     title: 'Categories (Cards)',
     //     icon: 'ion-bag',
@@ -85,52 +85,28 @@ angular.module('woocommerce-api.data', [])
 
     return data;
 })
-.factory('CartData', function($http, $q, CONFIG) {
-  var data = {};
+.factory('CartData', function($http,$rootScope, $q, CONFIG) {
+  var currentCart = [];
   var service = {};
-  service.generateSessionCart = function(basketItems){
+  service.getCurrentCart = function(){
+    return currentCart;
+  }
+  service.emptyBasket = function() {
+      currentCart = [];
+      $rootScope.$broadcast('basket');
+  }
+  service.generateSessionCart=function(basketItems){
     var shortCart =[];
     angular.forEach(basketItems, function(cat, key) {
       shortCart.push({id:cat.id,quantity:cat.quantity});
     });
     return shortCart;
   }
-  service.getCartAsync = function(params) {
 
-      params = params || {};
-      var deferred = $q.defer();
-
-      var url = generateQuery('GET', '/custom/cart', CONFIG, params);
-
-      $http({
-          method: 'GET',
-          url: url,
-          timeout: CONFIG.request_timeout
-      }).then(
-          function(result) {
-              //console.log(result)
-              // This callback will be called asynchronously when the response is available.
-              last_fetch = result.data['products'].length;
-              // Get new data and combine with existing ones, remove duplicates (fail-safe)
-              data = _.union(data, result.data['products']);
-              deferred.resolve();
-
-          },
-          function(result) {
-              console.log(result)
-              deferred.reject();
-          }
-      );
-
-      return deferred.promise;
-  };
-
-  service.addToCart = function(cartItems) {
+  service.addToCart=function(cartAddData) {
       var deferred = $q.defer();
       var params = {};
-
       var url = generateQuery('POST', '/custom/cart', CONFIG, params);
-
       $http({
           method: 'POST',
           url: url,
@@ -138,12 +114,12 @@ angular.module('woocommerce-api.data', [])
           headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
           },
-          data: cartItems
-
+          data: cartAddData
       }).then(
           function(result) {
               deferred.resolve(result);
-
+              currentCart =angular.copy(result.data.cartItems);
+              $rootScope.$broadcast('basket');
           },
           function(result) {
               deferred.reject(result);
@@ -354,22 +330,17 @@ angular.module('woocommerce-api.data', [])
 
     var basket = [];
     var service = {};
-    var totalBasketValue='';
-    var discountAmount='';
+    var totalBasketValue=0;
     var productIdCartMap =[];
     var billing_address = '';
     var shipping_address ='';
- /*
-    Payment Options:
-        Direct Bank Transfer:   bacs
-        Cheque Payment:         cheque
-        Cash on Delivery:       cod
-        PayPal:                 paypal
-
-    If you run a custom WooCommerce installation you will
-    want to update this with the extra choices you implemented.
-*/
-
+    var couponCode ='';
+    service.setCouponCode = function(tempCouponCode){
+      this.couponCode = tempCouponCode;
+    }
+    service.getCouponCode = function(){
+        return this.couponCode ;
+    }
     var payment_methods = {
         bacs: 'NEFT Payment',
         bacs2: 'Direct Bank Transfer',
@@ -402,23 +373,12 @@ angular.module('woocommerce-api.data', [])
               { text: btnTxt, type: btnClass }
           ]
       });
-      $rootScope.$broadcast('basket');
     }
     service.setTotalBasketValue = function(totalCartValue){
-      totalBasketValue = totalCartValue;
+      this.totalBasketValue = totalCartValue;
     }
     service.getTotalBasketValue = function(){
-        return totalBasketValue ;
-    }
-    service.setDiscountAmount = function(discountAmountValue){
-      discountAmount = discountAmountValue;
-    }
-    service.getDiscountAmount = function(){
-        return discountAmount ;
-    }
-    service.emptyBasket = function() {
-        basket = [];
-        $rootScope.$broadcast('basket');
+        return this.totalBasketValue ;
     }
 
     var formatProducts = function() {
@@ -427,7 +387,9 @@ angular.module('woocommerce-api.data', [])
          angular.forEach(basket, function(product, key) {
              var order_json = {
                  'product_id': product.id,
-                 'quantity': product.quantity
+                 'quantity': product.quantity,
+                 'total':product.total,
+                 'subtotal':product.total
              };
              var variations = {};
 
@@ -447,15 +409,17 @@ angular.module('woocommerce-api.data', [])
 
          return line_items;
      };
-
+    service.emptyBasket = function() {
+         basket = [];
+     }
     service.getBasket = function() {
         return basket;
     }
 
     service.getTotal = function() {
        var total_price = 0;
-       if(totalBasketValue!=''){
-         total_price = totalBasketValue;
+       if(this.totalBasketValue!=''){
+         total_price = this.totalBasketValue;
        }else{
            for (var i = basket.length - 1; i >= 0; i--)
                if (basket[i].variation && basket[i].variation.length>0) {
@@ -465,6 +429,7 @@ angular.module('woocommerce-api.data', [])
                    total_price +=
                    Number(basket[i].quantity) * Number(basket[i].price);
                }
+               total_price=0;
          }
        return total_price;
    };
@@ -474,46 +439,62 @@ angular.module('woocommerce-api.data', [])
         var deferred = $q.defer();
         var params = {};
         var url = generateQuery('POST', '/orders', CONFIG, params);
-        var customer = UserData.getUserData();
-        if(!customer){
-          customer =  JSON.parse($window.localStorage['user']).customer;
+        var customer = {};
+        if($window.localStorage['user']){
+            customer =  JSON.parse($window.localStorage['user']).customer;
+          }else{
+            customer = {
+              "first_name": "mobile-dummy",
+  				    "last_name": "mobile-dummy",
+            }
         }
+
         console.warn("Customer Data:", JSON.stringify(customer));
-        if(_.isEmpty(billing_address)){
-            billing_address = customer.billing_address;
+        if(_.isEmpty(this.billing_address)){
+            this.billing_address = customer.billing_address;
         }
-        if(_.isEmpty(shipping_address)){
-            shipping_address = customer.shipping_address;
+        if(_.isEmpty(this.shipping_address)){
+            this.shipping_address = customer.shipping_address;
         }
         var order_data = {
             'order': {
                 customer_id: customer.id,
                 line_items: formatProducts(),
+
                 // Fetched from customer data if they exist,
                 // if they don't and the request is to be completed in-app
                 // the user should be prompted.
-                shipping_address: shipping_address,
-                billing_address: billing_address,
+                shipping_address: this.shipping_address,
+                billing_address:this.billing_address,
                 note:'mobile-app'
             }
         };
-
+        if(this.couponCode!=null && !_.isEmpty(this.couponCode)){
+          order_data.order.coupon_lines=[{
+              code:this.couponCode,
+              amount:this.discountAmount
+            }];
+        }
         if (method && payment_methods[method]) {
             order_data.order.payment_details = {
                 method_id: method,
                 method_title: payment_methods[method],
-                transaction_id: transactionId,
                 paid: paid ? paid : false // Handling the case in which the var is undefined/null
             };
+            if(!_.isEmpty(transactionId) ){
+                order_data.order.payment_details.transaction_id = transactionId;
+            }
         }
 
         if (method && !payment_methods[method])
             console.warn("Invalid payment method. Setting it as a pending payment.");
 
+            console.log('request Order::');
+            console.log(order_data);
         $http({
             method: 'POST',
             url: url,
-            timeout:CONFIG.request_timeout,
+            timeout: 50000,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },

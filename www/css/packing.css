@@ -1,3 +1,7 @@
+.badge.badge-dark{
+  top: -9px;
+  left: -13px;
+}
 .largeSize {
   font-size: 83px;
   color: green;

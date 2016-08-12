@@ -73,10 +73,10 @@
           cart.push(addToCartProduct);
           console.log(cart);
           BasketData.putProductIdCartMap($scope.product.id,$scope.product);
-          var cartItems = {
+          var cartAddData = {
             basketData : cart,
           };
-          CartData.addToCart(cartItems).then(
+          CartData.addToCart(cartAddData).then(
             function(response){
               if(response.data){
                 console.log("response");
@@ -84,15 +84,20 @@
                 BasketData.emptyBasket();
                 var basketItems = angular.copy(response.data.cartItems);
                 var totalCartValue = angular.copy(response.data.totalCartValue);
+                var totalPriceHtml = angular.copy(response.data.totalCartHtml);
                 angular.forEach(basketItems, function(item, key) {
                   var cartProduct = [];
-                    cartProduct = BasketData.getProductIdCartMap(item.product_id);
+                    if(BasketData.getProductIdCartMap(item.product_id)){
+                        cartProduct = BasketData.getProductIdCartMap(item.product_id);
+                    }
+                    cartProduct['total'] = item.line_subtotal+item.line_subtotal_tax;
                     cartProduct['price']= item.data.price;
                     cartProduct['quantity']= item.quantity;
                     cartProduct['variation']= item.variation;
                   BasketData.add(cartProduct);
                 });
                 BasketData.setTotalBasketValue(totalCartValue);
+                  BasketData.totalPriceHtml = totalPriceHtml;
                   $rootScope.$broadcast('loading:hide');
                 BasketData.broadcast('Added to Cart','Product successfully added to your Cart.','OK','button-positive');
 

@@ -7,7 +7,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
 .run(function($rootScope, $ionicPlatform, $ionicLoading, CONFIG, PAYMENT_CONFIG) {
 
     $ionicPlatform.ready(function() {
-
+        $rootScope.$broadcast('loading:hide');
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -188,12 +188,12 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
-    .state('app.neftPayment', {
-        url: "/neftPayment",
+    .state('app.orderSuccess', {
+        url: "/orderSuccess?method&paymentId",
         views: {
             'menuContent': {
-                templateUrl: "templates/neftPayment.html",
-                controller: 'NeftPaymentCtrl'
+                templateUrl: "templates/orderSuccess.html",
+                controller: 'OrderSuccessCtrl'
             }
         }
     })
@@ -214,9 +214,9 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     });
-  //  $urlRouterProvider.otherwise('/app/orderAddress');
+//  $urlRouterProvider.otherwise('/app/orderAddress');
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/products/'+8121);
-  // $urlRouterProvider.otherwise('/app/home');
+   $urlRouterProvider.otherwise('/app/products/'+8121);
+//  $urlRouterProvider.otherwise('/app/home');
   //$location.path('/app/products/'+8121);
 });

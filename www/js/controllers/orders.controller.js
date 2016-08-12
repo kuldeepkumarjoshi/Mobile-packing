@@ -5,6 +5,7 @@
 
     // Social Controller
     .controller('OrdersCtrl', function($rootScope, $scope,$window, $stateParams, UserData) {
+      $scope.noOreder = false;
         var customerId = $stateParams.customer_id;
         $rootScope.$broadcast('loading:show');
         if($window.localStorage['user']){
@@ -14,6 +15,11 @@
         UserData.getOrdersAsync(customerId).then(
             function() {
                 $scope.orders = UserData.getOrders();
+                if($scope.orders.orders.length>0){
+                  $scope.noOreder=false;
+                }else{
+                  $scope.noOreder= true;
+                }
                 $rootScope.$broadcast('loading:hide');
             }
         );

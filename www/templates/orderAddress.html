@@ -1,5 +1,36 @@
 <ion-view>
+<style>
+/*.addressInput.ng-pristine.ng-untouched.ng-valid{
+  background: rgba(103, 80, 78, 0.68);
+  padding-left: 2%;
+  border-radius: 8px;
+}*/
+.addressInput{
+  background: rgba(175, 143, 143, 0.12) !important;
+  padding-left: 2% !important;
+  border-radius: 8px !important;
+  border-style: solid !important;
+  border-color: rgba(17, 17, 17, 0.18) !important;
+  border-width: thin !important;
+}
+.addressInput.ng-invalid.ng-invalid-required.ng-touched{
+  background: rgba(228, 33, 18, 0.68) !important;
+  color:white;
+  border-color: yellow !important;
+}
+.itemRequired{
+      padding: 0px !important;
+}
+.alpha{
+  color: red !important;
+}
+p{
+      margin-left: 5%;
+}
+/*.addressInput.ng-dirty.ng-valid-parse.ng-invalid.ng-invalid-required.ng-touched {
 
+}*/
+</style>
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
@@ -9,51 +40,71 @@
 		<ion-header-bar class="row bar-subheader bar-positive" ng-if="!isLogedIn">
 				<a class="title button col col-50"  href="#/app/newCustomer">  <i style="vertical-align: baseline;" class="icon ion-person-add"></i>  Sign up</a>
 				<div class="title button col col-50" style="border-right:#106bc5;border-width: 1px;border-style: solid;top:0px;"
-						ng-click="actionLogin()">  <i style="vertical-align: baseline;" class="icon ion-power"></i> Login</div>
+						ng-click="loginFirst()">  <i style="vertical-align: baseline;" class="icon ion-power"></i> Login</div>
 		</ion-header-bar>
     <ion-content class="has-header has-footer padding">
 
 		<div class="list">
-			<form name="customerForm" novalidate>
+			<form id="addressConfirmId" name="addressConfirm" novalidate>
         <div class="item item-divider">
 				Shipping Address
 				</div>
 
 				<label class="item item-input">
 				<span class="input-label">Company:</span>
-				<input ng-model="shipping_address.company" type="text">
+        <div style="width:58%;">
+				    <input ng-model="shipping_address.company" class="addressInput" type="text" >
+        </div>
 				</label>
 
-				<label class="item item-input">
-				<span class="input-label">Address (1):</span>
-				<input ng-model="shipping_address.address_1" type="text">
-				</label>
+        <div class="item itemRequired">
+  				<label class="item-input">
+    				<span class="input-label"><sup>*</sup>Address (1):</span>
+            <div style="width:58%;">
+    				    <input name="shAdd_addLine1" ng-model="shipping_address.address_1" class="addressInput" type="text" required>
+            </div>
+          </label>
+            <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.shAdd_addLine1.$error.required">Shipping address line 1 should not be empty.</p>
+        </div>
+
 
 				<label class="item item-input">
 				<span class="input-label">Address (2):</span>
-				<input ng-model="shipping_address.address_2" type="text">
+        <div style="width:58%;">
+				      <input ng-model="shipping_address.address_2" class="addressInput" type="text" >
+        </div>
 				</label>
 
-				<label class="item item-input">
-				<span class="input-label">City:</span>
-				<input ng-model="shipping_address.city" type="text">
+    <div class="item itemRequired">
+				<label class="item-input">
+				<span class="input-label"><sup>*</sup>City:</span>
+        <div style="width:58%;">
+				      <input name="shAdd_city" ng-model="shipping_address.city" type="text" class="addressInput" required>
+        </div>
 				</label>
+        <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.shAdd_city.$error.required">Shipping city should not be empty.</p>
+    </div>
+
 
 				<label class="item item-input">
 				<span class="input-label">State:</span>
-				<input ng-model="shipping_address.state" type="text">
+        <div style="width:58%;">
+				      <input ng-model="shipping_address.state" class="addressInput" type="text">
+        </div>
 				</label>
 
 				<label class="item item-input">
 				<span class="input-label">Postcode:</span>
-				<input ng-model="shipping_address.postcode" type="text">
+        <div style="width:58%;">
+				      <input ng-model="shipping_address.postcode" class="addressInput" type="text">
+        </div>
 				</label>
 
 				<div class="row item item-divider">
 					<div class="col-33">Billing Address</div>
 					<div class="col-50 text-right">
 						<label class="toggle">
-					   <input type="checkbox" ng-model="addressData.isSameAddress" ng-change="copyAction()">
+					   <input type="checkbox" ng-model="addressData.isSameAddress" class="addressInput" ng-change="copyAction()">
 						   <div class="track">
 						     <div class="handle"></div>
 						   </div>
@@ -65,44 +116,70 @@
 
 				<label class="item item-input">
 				<span class="input-label">Company:</span>
-				<input ng-model="billing_address.company" type="text">
+        <div style="width:58%;">
+				      <input ng-model="billing_address.company" class="addressInput" type="text">
+        </div>
 				</label>
 
-				<label class="item item-input">
-				<span class="input-label">Address (1):</span>
-				<input ng-model="billing_address.address_1" type="text">
+    <div class="item itemRequired">
+				<label class="item-input">
+				<span class="input-label"><sup>*</sup>Address (1):</span>
+        <div style="width:58%;">
+				      <input name="billAdd_addLine1" ng-model="billing_address.address_1" class="addressInput" type="text" required>
+        </div>
 				</label>
+          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billAdd_addLine1.$error.required">Billing address line 1 should not be empty.</p>
+    </div>
 
 				<label class="item item-input">
 				<span class="input-label">Address (2):</span>
-				<input ng-model="billing_address.address_2" type="text">
+        <div style="width:58%;">
+				      <input ng-model="billing_address.address_2" class="addressInput" type="text">
+        </div>
 				</label>
 
-				<label class="item item-input">
-				<span class="input-label">City:</span>
-				<input ng-model="billing_address.city" type="text">
+    <div class="item itemRequired">
+				<label class="item-input">
+				<span class="input-label"><sup>*</sup>City:</span>
+        <div style="width:58%;">
+				      <input name="billAdd_city" ng-model="billing_address.city" class="addressInput" type="text" required>
+        </div>
 				</label>
+        <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billAdd_city.$error.required">Billing city should not be empty.</p>
+    </div>
+
 
 				<label class="item item-input">
 				<span class="input-label">State:</span>
-				<input ng-model="billing_address.state" type="text">
+        <div style="width:58%;">
+				      <input ng-model="billing_address.state" class="addressInput" type="text">
+        </div>
 				</label>
 
 				<label class="item item-input">
 				<span class="input-label">Postcode:</span>
-				<input ng-model="billing_address.postcode" type="text">
+        <div style="width:58%;">
+				      <input ng-model="billing_address.postcode" class="addressInput" type="text">
+        </div>
 				</label>
 
-				<label class="item item-input">
-				<span class="input-label">Phone:</span>
-				<input ng-model="billing_address.phone" type="text">
+    <div class="item itemRequired" style="margin-bottom: 12%;">
+				<label class="item-input">
+				<span class="input-label"><sup>*</sup>Phone: (+91)</span>
+        <div style="width:58%;">
+				      <input name="billAdd_phone" ng-model="billing_address.phone" type="text" class="addressInput"   required></div>
 				</label>
+        <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billAdd_phone.$error.required">Billing phone should not be empty.</p>
+        <p class="alpha" ng-show="errorMsg">{{errorMsg}}</p>
+
+      </div>
+
 			</form>
 		</div>
     </ion-content>
-		<ion-footer-bar class="bar-positive" ng-click="checkoutRedirect()">
-					 <div  class="title button">
+		<ion-footer-bar class="bar-positive"  ng-click="checkoutRedirect()">
+			<div  class="title button" >
 							Confirm Address
-						</div>
+			</div>
 		</ion-footer-bar>
 </ion-view>

@@ -1,4 +1,4 @@
-<ion-view title="NEFT Payment">
+<ion-view>
   <style>
   .displayNone{
     display: none !important;
@@ -10,8 +10,11 @@
   <ion-nav-buttons side="left">
       <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-    <ion-content class="has-header">
-        <div class="card" >
+  <ion-header-bar class="bar-subheader bar-positive">
+          <h1 class="title">Order Status</h1>
+  </ion-header-bar>
+    <ion-content class="has-header has-footer padding">
+        <div class="card" ng-show="order">
             <div class="item item-divider">
                 <div style="text-align:center;">
                   <i class="icon largeSize ion-happy-outline"></i> <br/>
@@ -21,7 +24,7 @@
                     <div style="float:left;">Order id:{{order.id}}</div>
                     <div style="float:right;">Date:{{order.created_at | date}}</div>
             </div>
-            <div class="item item-text-wrap">
+            <div class="item item-text-wrap" ng-show="paymentMethod == 'bacs'">
                 <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.
                   Your order won’t be shipped until the funds have cleared in our account.</p><br/>
                 <div class="item item-divider" style="text-align:center;">
@@ -33,11 +36,18 @@
                   <strong>  IFSC:</strong> ICIC0000315
                 </div>
             </div>
+            <div class="item item-text-wrap" ng-show="paymentMethod == 'razorPay'">
+              <p>Please check your email for status of your order .</p>
+            </div>
+        </div>
+        <div class="card" style="text-align:center;" ng-hide="order">
+           Preparing order...
         </div>
 
-
     </ion-content>
-    <div class="bar bar-footer bar-positive">
-     <a class="title" href="#/app/home" style="text-decoration: initial;">OK</a>
-   </div>
+    <ion-footer-bar class="bar-positive"  ng-click="checkoutRedirect()">
+			<div  class="title button" ng-click="reloadAndRedirect()">
+						OK
+			</div>
+		</ion-footer-bar>
 </ion-view>

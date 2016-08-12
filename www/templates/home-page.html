@@ -4,7 +4,7 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span  class="badge badge-dark">{{cartItems}}</span></i></a>
     </ion-nav-buttons>
     <ion-content class="has-header">
 
@@ -14,10 +14,10 @@
                     <img src="images/all-product.jpg" />
                   </a>
             </div>
-        </div>      
+        </div>
           <div class="row" ng-init="count=0"  ng-repeat="row in categories | partition:2">
               <!-- Parent -->
-              <div  class="col"  ng-repeat="category in row">
+              <div  class="{{row.rowClass}}"  ng-repeat="category in row">
                   <div class="card-content categoryBox" style="background-image:url(images/{{category.slug}}.jpg);" ng-click="moveToCategory(category)">
                       <div >
                         {{category.name}}

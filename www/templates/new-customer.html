@@ -54,7 +54,7 @@
 
 				<label class="item item-input">
 				<span class="input-label">Password*:</span>
-				<input name="password" ng-model="customer.password" type="text" required>
+				<input name="password" ng-model="customer.password" type="password" required>
 				</label>
 				<p class="error" ng-show="customerForm.password.$error.required">Please enter a Password.</p>
 
@@ -309,7 +309,7 @@
 		</div>
 
     </ion-content>
-		<ion-footer-bar ng-show="customer.edit" class="bar-positive" ng-click="checkoutRedirect()" ng-click="createCustomer()" ng-disabled="customerForm.$invalid">
+		<ion-footer-bar ng-show="customer.edit" class="bar-positive"  ng-click="createCustomer()" ng-disabled="customerForm.$invalid">
 					 <div  class="title button">
 						Create Customer
 						</div>

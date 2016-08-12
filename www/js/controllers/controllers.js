@@ -6,13 +6,7 @@ angular.module('woocommerce-api.controllers', [])
 
     $scope.items = Data.items;
 
-    $scope.index = {};
-    $scope.getCart = function(){
-      CartData.getCartAsync();
-    };
-    $scope.createCart= function(){
-      CartData.createCart({id:8121,quantity:1002});
-    };
+    $scope.index = {}; 
 
     MetaData.getProperties().then(
         function(result) {
@@ -258,173 +252,6 @@ angular.module('woocommerce-api.controllers', [])
 
 })
 
-// Basket Controller
-.controller('BasketCtrl', function($rootScope,CartData, $scope, $state, $sce, BasketData, MetaData) {
-
-  $scope.meta = {};
-  $scope.helperData = {};
-  $scope.basketProducts = BasketData.getBasket();
-  console.log($scope.basketProducts);
-
-  function setTotalField(){
-    $rootScope.$broadcast('loading:show');
-      MetaData.getProperties().then(
-          function(result) {
-              $scope.meta = result.meta;
-              if ($scope.basketProducts.length > 0) {
-                  var total_price = BasketData.getTotal();
-              $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
-              $scope.totalPrice = total_price.toFixed(2) ;
-            }  else {
-                  $scope.totalPriceHtml = '0';
-                  $scope.totalPrice = 0;
-              }
-                $rootScope.$broadcast('loading:hide');
-          }
-      );
-    }
-    setTotalField();
-    // Get the basket products
-
-    // Calculate total price
-
-
-        if ($scope.basketProducts.length > 0) {
-            var total_price = BasketData.getTotal();
-
-            if ($scope.meta.currency_position == 'left') {
-                $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
-            } else if ($scope.meta.currency_position == 'left_space') {
-                $scope.totalPriceHtml =  $scope.meta.currency_format + ' ' + total_price.toFixed(2) ;
-            } else if ($scope.meta.currency_position == 'right') {
-                $scope.totalPriceHtml =  total_price.toFixed(2) + $scope.meta.currency_format ;
-            } else {
-                $scope.totalPriceHtml =  total_price.toFixed(2) + ' ' + $scope.meta.currency_format;
-            }
-        } else {
-            $scope.totalPriceHtml = '0';
-            $scope.totalPrice = 0;
-        }
-
-
-
-    $scope.getFormmatedPrice = function(price) {
-
-           var formmatedPrice;
-
-           if ($scope.meta.currency_position == 'left') {
-               formmatedPrice = '<span class="amount">'
-                   + $scope.meta.currency_format + price + '</span>';
-           } else if ($scope.meta.currency_position == 'left_space') {
-               formmatedPrice = '<span class="amount">'
-                   + $scope.meta.currency_format + ' ' + price + '</span>';
-           } else if ($scope.meta.currency_position == 'right') {
-               formmatedPrice = '<span class="amount">'
-                   + price + $scope.meta.currency_format + '</span>';
-           } else {
-               formmatedPrice = '<span class="amount">'
-                   + price + ' ' + $scope.meta.currency_format + '</span>';
-           }
-
-           return formmatedPrice;
-       };
-    $scope.emptyBasket = function() {
-        $scope.basketProducts = [];
-        BasketData.emptyBasket();
-    };
-    $scope.applyCoupon = function(){
-      $rootScope.$broadcast('loading:show');
-    var cart =  CartData.generateSessionCart(BasketData.getBasket());
-    console.log(cart);
-
-    var cartItems = {
-      basketData : cart,
-      couponCode : $scope.helperData.couponCode
-    };
-    CartData.addToCart(cartItems).then(
-      function(response){
-        if(response.data){
-          console.log("response");
-          console.log(response);
-          BasketData.emptyBasket();
-          var basketItems = angular.copy(response.data.cartItems);
-          var totalCartValue = angular.copy(response.data.totalCartValue);
-          $scope.oldTotalPriceHtml=0;
-          angular.forEach(basketItems, function(item, key) {
-            var cartProduct = [];
-              cartProduct = BasketData.getProductIdCartMap(item.product_id);
-              cartProduct['price']= item.data.price;
-              cartProduct['quantity']= item.quantity;
-              cartProduct['variation']= item.variation;
-              $scope.oldTotalPriceHtml = $scope.oldTotalPriceHtml + (item.line_subtotal+item.line_subtotal_tax);
-            BasketData.add(cartProduct);
-            $scope.helperData.couponCode='';
-          });
-          $scope.basketProducts = BasketData.getBasket();
-          $scope.cartItems = $scope.basketProducts.length;
-          BasketData.setTotalBasketValue(totalCartValue);
-          $scope.oldTotalPriceHtml=  $scope.oldTotalPriceHtml.toFixed(2);
-          BasketData.setDiscountAmount($scope.meta.currency_format + response.data.discountAmount);
-          $scope.discountAmount =$scope.meta.currency_format + response.data.discountAmount.toFixed(2) ;
-          if ($scope.basketProducts.length > 0) {
-              var total_price = BasketData.getTotal();
-            $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
-            $scope.totalPrice = total_price.toFixed(2) ;
-          }else{
-                $scope.totalPriceHtml = '0';
-                $scope.totalPrice = 0;
-          }
-            $rootScope.$broadcast('loading:hide');
-            BasketData.broadcast('Coupon status',response.data.couponStatus,'OK','button-positive');
-        }
-      });
-    }
-    $scope.removeProduct = function(id) {
-      $rootScope.$broadcast('loading:show');
-    var cart =  CartData.generateSessionCart(BasketData.getBasket());
-    var product = _.find(cart, { id: parseInt(id) });
-    cart.splice(cart.indexOf(product), 1);
-    console.log(cart);
-    var cartItems = {
-      basketData : cart,
-    };
-    CartData.addToCart(cartItems).then(
-      function(response){
-        if(response.data){
-          console.log("response");
-          console.log(response);
-          BasketData.emptyBasket();
-          var basketItems = angular.copy(response.data.cartItems);
-          var totalCartValue = angular.copy(response.data.totalCartValue);
-          angular.forEach(basketItems, function(item, key) {
-            var cartProduct = [];
-              cartProduct = BasketData.getProductIdCartMap(item.product_id);
-              cartProduct['price']= item.data.price;
-              cartProduct['quantity']= item.quantity;
-              cartProduct['variation']= item.variation;
-            BasketData.add(cartProduct);
-          });
-          $scope.basketProducts = BasketData.getBasket();
-          $scope.cartItems = $scope.basketProducts.length;
-          BasketData.setTotalBasketValue(totalCartValue);
-          if ($scope.basketProducts.length > 0) {
-              var total_price = BasketData.getTotal();
-            $scope.totalPriceHtml =  $scope.meta.currency_format + total_price.toFixed(2) ;
-            $scope.totalPrice = total_price.toFixed(2) ;
-          }else{
-                $scope.totalPriceHtml = '0';
-                $scope.totalPrice = 0;
-          }
-            $rootScope.$broadcast('loading:hide');
-
-        }
-    });
-    };
-
-    $scope.proceedToOrder = function() {
-        $state.go('app.orderAddress');
-    };
-})
 // New Customer Controller
 .controller('NewCustomerCtrl', function($scope, $rootScope, $window, $ionicPopup, UserData) {
 
@@ -485,7 +312,7 @@ angular.module('woocommerce-api.controllers', [])
                 $scope.user= {};
                 $scope.user.customer = $scope.customer;
                 $window.localStorage['user'] =JSON.stringify($scope.user);
-                $window.location.reload(true);
+
               }
               $rootScope.$broadcast('loading:hide');
             var alertPopup = $ionicPopup.alert({

@@ -45,7 +45,7 @@
                 </div>
                 <div class="row item item-text-wrap" ng-repeat="disRow in tableData" style="padding:0px;">
                     <div class="col col-33 col-offset-10">  {{disRow.min}} -  <span ng-if="! $last"> {{disRow.max}}</span></div>
-                    <div class="col col-33 col-offset-10"><i class="icon ion-pricetag"></i>{{disRow.display_price}}</div>
+                    <div class="col col-33 col-offset-10">{{disRow.display_price}}</div>
                 </div>
               </div>
 
@@ -97,7 +97,7 @@
                           {{cat}}
                       </a>
                   </div>
-                  <div ng-bind-html="product.short_description"></div>
+                  <div    style="white-space: normal;" ng-bind-html="product.short_description"></div>
               </div>
             </div>
             </div>
@@ -133,12 +133,12 @@
 
         </div>
     </ion-content>
-    <ion-footer-bar class="bar-positive">
-        <div ng-click="toBasket()" ng-if="product" ng-disabled="!inStock">
-           <h1 class="title">
-             <i class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span ng-if="inStock ">Add To Cart</span>
-             <span ng-if="!inStock">Out of stock</span>
-            </h1>
-        </div>
+    <ion-footer-bar class="bar-positive" ng-if="product">
+        <div class="title button disableBtn" ng-if="!inStock">
+           <i style="vertical-align: baseline;" class="icon ion-ios-cart" style='margin-right: 4px'> </i><span ng-if="!inStock">Out of stock</span>
+         </div>
+         <div class="title button" ng-click="toBasket()"  ng-if="inStock ">
+           <i style="vertical-align: baseline;" class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span >Add To Cart</span>
+         </div>
     </ion-footer-bar>
 </ion-view>

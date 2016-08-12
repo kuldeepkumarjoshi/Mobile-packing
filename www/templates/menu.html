@@ -17,6 +17,9 @@
                     <i class="icon {{item.icon}}"></i> {{item.title}}
                 </ion-item>
             </ion-list>
+            <ion-item ng-if="isLogedIn" nav-clear menu-close href="#/app/orders">
+                <i class="icon ion-bag"></i>  My order
+            </ion-item>
             <ion-item ng-if="isLogedIn" nav-clear menu-close href="#/app/newCustomer">
                 <i class="icon ion-person"></i>  My Profile
             </ion-item>
