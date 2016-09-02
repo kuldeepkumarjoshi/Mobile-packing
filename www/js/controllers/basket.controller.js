@@ -8,6 +8,7 @@
 
       $scope.meta = {};
       $scope.helperData = {};
+      var count =0;
       $scope.basketProducts = BasketData.getBasket();
       console.log($scope.basketProducts);
 
@@ -25,8 +26,14 @@
         function setPrice(){
           if ($scope.basketProducts.length > 0) {
               var total_price = BasketData.getTotalBasketValue();
+          $scope.oldTotalPriceHtml = BasketData.getTotalClientCalculatedBasketValue();
           $scope.totalPriceHtml =  BasketData.totalPriceHtml;
           $scope.totalPrice = total_price.toFixed(2) ;
+          if(BasketData.discountAmount){
+            $scope.discountAmount = BasketData.discountAmount.toFixed(2) ;
+          }else{
+            $scope.discountAmount =null;
+          }
         }  else {
               $scope.totalPriceHtml = '0';
               $scope.totalPrice = 0;
@@ -51,7 +58,6 @@
                    formmatedPrice = '<span class="amount">'
                        + price + ' ' + $scope.meta.currency_format + '</span>';
                }
-
                return formmatedPrice;
            };
         $scope.emptyBasket = function() {
@@ -83,7 +89,7 @@
           if(response.data.discountAmount){
             BasketData.setCouponCode(cartAddData.couponCode);
             BasketData.discountAmount =  response.data.discountAmount;
-            $scope.discountAmount =$scope.meta.currency_format + response.data.discountAmount.toFixed(2) ;
+            $scope.discountAmount = response.data.discountAmount.toFixed(2) ;
           }else{
             BasketData.setCouponCode(null);
             BasketData.discountAmount =  0;
@@ -108,7 +114,10 @@
               basketData : cart,
               couponCode : $scope.helperData.couponCode
             };
-            $scope.oldTotalPriceHtml=angular.copy($scope.totalPriceHtml);
+
+
+
+
             CartData.addToCart(cartAddData).then(
               function(response){
                 if(response.data){

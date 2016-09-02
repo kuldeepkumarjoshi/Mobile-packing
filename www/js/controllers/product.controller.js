@@ -82,6 +82,7 @@
                 console.log("response");
                 console.log(response);
                 BasketData.emptyBasket();
+                 BasketData.discountAmount = null;
                 var basketItems = angular.copy(response.data.cartItems);
                 var totalCartValue = angular.copy(response.data.totalCartValue);
                 var totalPriceHtml = angular.copy(response.data.totalCartHtml);

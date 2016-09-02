@@ -18,6 +18,16 @@
             function(response) {
                 console.log("response : " + JSON.stringify(response));
                 $scope.order = response.data.order;
+
+                if($window.localStorage['user']){
+                  if(!$scope.user){
+                    $scope.user = [];
+                  }
+                  $scope.user.customer = response.data.order.customer;
+                  $window.localStorage['user'] =JSON.stringify($scope.user);
+                }
+
+
                  emptyBasket();
                 //
                   $ionicHistory.clearHistory();

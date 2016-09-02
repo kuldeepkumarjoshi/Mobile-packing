@@ -1,13 +1,13 @@
 <ion-view>
     <ion-nav-bar class="bar-stable nav-title-slide-ios7">
-    <ion-nav-back-button class="button-clear"><i class="icon ion-ios-arrow-back"></i></i> Back</ion-nav-back-button>
+    <ion-nav-back-button class="button-clear"><i class="icon arrow_back_custom"></i></i> </ion-nav-back-button>
     </ion-nav-bar>
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <div class="buttons">
-            <button ui-sref="app.basket" class="button no-animation button-icon icon" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i>
+            <button ui-sref="app.basket" class="button no-animation button-icon icon" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><i class="icon ion-ios-cart"></i><span  class="badge badge-dark">{{cartItems}}</span>
             </button>
 
             <!-- <button ng-click="shareProduct()" class="button no-animation button-icon icon ion-share" style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
@@ -138,7 +138,7 @@
            <i style="vertical-align: baseline;" class="icon ion-ios-cart" style='margin-right: 4px'> </i><span ng-if="!inStock">Out of stock</span>
          </div>
          <div class="title button" ng-click="toBasket()"  ng-if="inStock ">
-           <i style="vertical-align: baseline;" class="icon ion-ios-cart" style='margin-right: 4px'> </i> <span >Add To Cart</span>
+           <i style="vertical-align: baseline;" class="icon ion-ios-cart-outline" style='margin-right: 4px'> </i> <span >Add To Cart</span>
          </div>
     </ion-footer-bar>
 </ion-view>

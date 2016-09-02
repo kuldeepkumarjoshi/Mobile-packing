@@ -1,6 +1,17 @@
 .badge.badge-dark{
-  top: -9px;
-  left: -13px;
+  top: -39px;
+      left: 3px;;
+  background-color: #ff5555;
+}
+.ion-ios-cart{
+    content: url('../images/cartIcon.png') !important;
+    margin-left: -13%;
+margin-top: 11%;
+}
+.arrow_back_custom{
+    content: url('../images/backIcon.png') !important;
+    margin-left: 1%;
+margin-top: 37%;
 }
 .largeSize {
   font-size: 83px;
@@ -80,4 +91,11 @@ color: rgba(218, 229, 236, 0.61);
     color: white;
   width: 100%;
     opacity: 0.6;
+}
+
+.bannerAllproduct{
+    width: 100%;
+    background-size: cover;
+    height: 240px;
+    background-repeat: no-repeat;
 }

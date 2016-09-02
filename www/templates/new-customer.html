@@ -3,7 +3,7 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"><span class="badge badge-dark">{{cartItems}}</span></i></a>
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"></i><span  class="badge badge-dark">{{cartItems}}</span></a>
     </ion-nav-buttons>
 
 		<ion-header-bar ng-show="!customer.edit" class="row bar-subheader bar-positive">
@@ -12,12 +12,12 @@
 			</div>
 			<div class="button title col col-50" style="border-right:#106bc5;border-width: 1px;border-style: solid;top:0px;"
 					 ui-sref="app.basket">
-				<i style="vertical-align: baseline;" class="icon ion-ios-cart"></i> View Cart
+				<i style="vertical-align: baseline;" class="icon ion-ios-cart-outline"></i> View Cart
 			</div>
     </ion-header-bar>
 		<ion-header-bar ng-show="customer.edit" class="row bar-subheader bar-positive">
 			<div class="title">
-				<i class="icon ion-ios-cart"></i> New Customer
+				<i class="icon ion-person"></i> New Customer
 			</div>
     </ion-header-bar>
     <ion-content class="has-header padding has-footer" style="    padding-top:44px;">
@@ -116,9 +116,10 @@
   				<p class="error" ng-show="customerForm.billingAddressEmail.$error.email">Please enter a valid.</p>
 
   				<label class="item item-input" >
-  				<span class="input-label">Phone:</span>
+  				<span class="input-label">Phone: (+91)</span>
   				<input ng-model="billing_address.phone" type="text">
   				</label>
+          	<p class="error"  ng-show="errorMsg">{{errorMsg}}</p>
         </div>
 
 				<div class="row item item-divider"  style="width: auto; margin-top: 6px;" ng-init="shipOpen =false;" ng-click="shipOpen = !shipOpen">
@@ -257,7 +258,7 @@
 			</label>
 
 			<label class="item item-input">
-			<span class="input-label">Phone:</span>
+			<span class="input-label">Phone: (+91)</span>
 			{{customer.billing_address.phone}}
 			</label>
 

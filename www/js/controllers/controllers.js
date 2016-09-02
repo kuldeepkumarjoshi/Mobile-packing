@@ -14,14 +14,16 @@ angular.module('woocommerce-api.controllers', [])
 
         }
     );
-
+    $scope.getAllProduct = function(){
+          $state.go('app.home');
+    };
     $scope.moveToCategory = function(cat){
       $rootScope.cat = cat;
       if(cat.children.length == 0 && cat.count > 0 ){
           $location.path('/app/categories/'+cat.slug+'/'+cat.name);
       }else{
         $state.go('app.subcategory');
-      }      
+      }
     };
     $rootScope.$broadcast('loading:show');
 
@@ -257,7 +259,7 @@ angular.module('woocommerce-api.controllers', [])
 })
 
 // New Customer Controller
-.controller('NewCustomerCtrl', function($scope, $rootScope, $window, $ionicPopup, UserData) {
+.controller('NewCustomerCtrl', function($scope,$ionicScrollDelegate, $rootScope, $window, $ionicPopup, UserData) {
 
     $scope.customer = {};
     $scope.billing_address = {};
@@ -271,7 +273,27 @@ angular.module('woocommerce-api.controllers', [])
        $scope.isLogedIn = true;
 
       }
+
+      function isFormValid(){
+        $scope.errorMsg = null;
+
+        if($scope.billing_address.phone == null ||  _.isEmpty($scope.billing_address.phone)){
+          return false;
+        }else  if(isNaN($scope.billing_address.phone)){
+            $scope.errorMsg = "Phone number must be in numbers";
+             $ionicScrollDelegate.scrollBottom();
+            return false;
+        }else  if($scope.billing_address.phone.length != 10){
+            $scope.errorMsg = "Phone number must be of 10 digits";
+             $ionicScrollDelegate.scrollBottom();
+            return false;
+        }
+        return true;
+      }
     $scope.createCustomer = function() {
+      if(!isFormValid()){
+        return;
+      }
       $rootScope.$broadcast('loading:show');
         var data = {
             customer: {
@@ -289,7 +311,7 @@ angular.module('woocommerce-api.controllers', [])
                     city: $scope.billing_address.city,
                     state: $scope.billing_address.state,
                     postcode: $scope.billing_address.postcode,
-                    country: $scope.billing_address.country,
+                    country: 'IN',
                     email: $scope.billing_address.email,
                     phone: $scope.billing_address.phone
                 },
@@ -302,7 +324,7 @@ angular.module('woocommerce-api.controllers', [])
                     city: $scope.shipping_address.city,
                     state: $scope.shipping_address.state,
                     postcode: $scope.shipping_address.postcode,
-                    country: $scope.shipping_address.country
+                    country: 'IN'
                 }
             }
         };

@@ -22,9 +22,17 @@
     $scope.populateAddressLoginUser();
       $scope.copyAction = function(){
         if($scope.addressData.isSameAddress){
-          $scope.billing_address = $scope.shipping_address;
+          $scope.shipping_address = $scope.billing_address;
+        //  $scope.shipping_address.first_name = $scope.billing_address.first_name;
+          // $scope.shipping_address.last_name = $scope.billing_address.last_name;
+          // $scope.shipping_address.address_1 = $scope.billing_address.address_1;
+          // $scope.shipping_address.address_2 = $scope.billing_address.address_2;
+          // $scope.shipping_address.city = $scope.billing_address.city;
+          // $scope.shipping_address.state = $scope.billing_address.state;
+          // $scope.shipping_address.postcode = $scope.billing_address.postcode;
+          // $scope.shipping_address.email = $scope.billing_address.email;
         }else{
-          $scope.billing_address = {};
+          $scope.shipping_address = {};
         }
 
       };
@@ -65,7 +73,7 @@
           $scope.addressData.enabled =true;
           return;
         }
-        $scope.billing_address.phone = '91'+$scope.billing_address.phone;
+        //$scope.billing_address.phone = '91'+$scope.billing_address.phone;
         $scope.billing_address.country = 'IN';
         BasketData.shipping_address = angular.copy($scope.shipping_address);
         BasketData.billing_address = angular.copy($scope.billing_address);

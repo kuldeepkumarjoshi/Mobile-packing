@@ -14,7 +14,7 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
         });
         $rootScope.$broadcast('basket');
         var loginPopup = {
-          template: '<input type="text" placeholder="Username"  ng-model="data.username"><br/>'
+          template: '<input type="text" placeholder="Username or Email"  ng-model="data.username"><br/>'
                     +'<input type="password" placeholder="Password"  ng-model="data.password"><br/>'
                     +'<div style="color:red;" ng-bind-html="validationMsg"></div>',
           title: ' Login',
@@ -86,7 +86,7 @@ var AppCtrl = function($scope,$rootScope,$window,$ionicHistory,$ionicPopup,$stat
                  return;
              }, function() {
 
-                 $scope.validationMsg = "Account does not exists with this email.";
+                 $scope.validationMsg = "Invalid username or email.";
 
                  $rootScope.$broadcast('loading:hide');
                 var myPopup = $ionicPopup.show(loginPopup);

@@ -45,7 +45,7 @@ angular.module('woocommerce-api.data', [])
         url: '#/app/products'
     }, {
        title: 'Cart',
-       icon: 'ion-ios-cart',
+       icon: 'ion-ios-cart-outline',
        url: '#/app/basket'
    },
     //  {
@@ -415,7 +415,20 @@ angular.module('woocommerce-api.data', [])
     service.getBasket = function() {
         return basket;
     }
-
+    service.getTotalClientCalculatedBasketValue = function(){
+         var total_price = 0;
+          for (var i = basket.length - 1; i >= 0; i--)
+          {
+              if (basket[i].variation && basket[i].variation.length>0) {
+                  total_price +=
+                  Number(basket[i].quantity) * Number(basket[i].variation.price);
+              } else {
+                  total_price +=
+                  Number(basket[i].quantity) * Number(basket[i].price);
+              }
+            }
+      return total_price;
+    };
     service.getTotal = function() {
        var total_price = 0;
        if(this.totalBasketValue!=''){
