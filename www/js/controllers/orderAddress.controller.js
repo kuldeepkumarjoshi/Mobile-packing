@@ -59,7 +59,12 @@
             $scope.errorMsg = "Phone number must be in numbers";
              $ionicScrollDelegate.scrollBottom();
             return false;
-        }else  if($scope.billing_address.phone.length != 10){
+        }else  if($scope.billing_address.phone.length != 10 ){
+          var countryCode=$scope.billing_address.phone.substr(0,2);
+          countryCode=='91';
+
+          //TODO bypass length validation if length is 12 and first 2 digits are 91
+
             $scope.errorMsg = "Phone number must be of 10 digits";
              $ionicScrollDelegate.scrollBottom();
             return false;

@@ -53,7 +53,7 @@
           }
           $scope.paid=false;
             var options = {
-                description: 'Please check cart your amount before pay.',
+                description: 'Packnation - Great packaging delivered.',
                 image:"http://packnation.in/wp-content/uploads/2015/12/logo.jpg",
                 currency: 'INR',
                 key: 'rzp_live_Jta8q6CBITnSIc',

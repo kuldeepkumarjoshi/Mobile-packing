@@ -28,8 +28,17 @@
           }
         }
         function initiateQuantity(category){
-          stepValue = category.stepValue;
-          $scope.minQuantity = category.minQuantity;
+          if($scope.product.quantityRule != undefined && !_.isEmpty($scope.product.quantityRule.min_value)){
+            $scope.minQuantity = parseInt($scope.product.quantityRule.min_value);
+          }else{
+            $scope.minQuantity  = category.minQuantity;
+          }
+          if($scope.product.quantityRule != undefined &&  !_.isEmpty($scope.product.quantityRule.min_value )){
+            stepValue =  parseInt($scope.product.quantityRule.step);
+          }else{
+            stepValue  =  category.stepValue;
+          }
+
           $scope.maxQuantity = $scope.product.stock_quantity;
           $scope.quantity.value = $scope.minQuantity ;
           $scope.inStock = ($scope.minQuantity < $scope.product.stock_quantity);

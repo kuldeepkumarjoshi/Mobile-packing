@@ -277,23 +277,41 @@ angular.module('woocommerce-api.controllers', [])
       function isFormValid(){
         $scope.errorMsg = null;
 
-        if($scope.billing_address.phone == null ||  _.isEmpty($scope.billing_address.phone)){
-          return false;
-        }else  if(isNaN($scope.billing_address.phone)){
-            $scope.errorMsg = "Phone number must be in numbers";
-             $ionicScrollDelegate.scrollBottom();
-            return false;
-        }else  if($scope.billing_address.phone.length != 10){
-            $scope.errorMsg = "Phone number must be of 10 digits";
-             $ionicScrollDelegate.scrollBottom();
-            return false;
+        if($scope.billing_address.phone != null ){
+
+          if(isNaN($scope.billing_address.phone)){
+              $scope.errorMsg = "Phone number must be in numbers";
+               $ionicScrollDelegate.scrollBottom();
+              return false;
+          }else  if($scope.billing_address.phone.length != 10){
+              $scope.errorMsg = "Phone number must be of 10 digits";
+               $ionicScrollDelegate.scrollBottom();
+              return false;
+          }
         }
         return true;
       }
+
+    function setBillingAndShippingNameIfNull(){
+      if($scope.billing_address.first_name == null){
+        $scope.billing_address.first_name = $scope.customer.first_name ;
+      }
+      if($scope.billing_address.last_name == null){
+        $scope.billing_address.last_name = $scope.customer.last_name ;
+      }
+      if($scope.shipping_address.first_name == null){
+        $scope.shipping_address.first_name = $scope.customer.first_name ;
+      }
+      if($scope.shipping_address.last_name == null){
+        $scope.shipping_address.last_name = $scope.customer.last_name ;
+      }
+    }
     $scope.createCustomer = function() {
       if(!isFormValid()){
         return;
       }
+      setBillingAndShippingNameIfNull();
+
       $rootScope.$broadcast('loading:show');
         var data = {
             customer: {

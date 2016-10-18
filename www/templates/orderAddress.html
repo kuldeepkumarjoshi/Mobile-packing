@@ -55,10 +55,10 @@ p{
           <label class="item-input">
           <span class="input-label"><sup>*</sup>First Name:</span>
           <div style="width:58%;">
-            <input name="billAdd_addLine1" ng-model="billing_address.first_name" class="addressInput" type="text" required>
+            <input name="billAdd_firstName" ng-model="billing_address.first_name" class="addressInput" type="text" required>
           </div>
           </label>
-          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billAdd_addLine1.$error.required">Billing firstname should not be empty.</p>
+          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billAdd_firstName.$error.required">Billing firstname should not be empty.</p>
         </div>
 
         <label class="item item-input">
@@ -72,10 +72,11 @@ p{
           <label class="item-input">
           <span class="input-label"><sup>*</sup>Email:</span>
           <div style="width:58%;">
-            <input name="billAdd_addLine1" ng-model="billing_address.email" class="addressInput" type="email" required>
+            <input name="billingAddressEmail" ng-model="billing_address.email" class="addressInput" type="email" required>
           </div>
           </label>
-          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="customerForm.billingAddressEmail.$error.email">Billing email should not be empty.</p>
+          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billingAddressEmail.$error.required">Billing email should not be empty.</p>
+          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.billingAddressEmail.$error.email">That is not a valid Email. Please enter a valid Email.</p>
         </div>
 
         <div class="item itemRequired">
@@ -147,10 +148,10 @@ p{
           <label class="item-input">
           <span class="input-label"><sup>*</sup>First Name:</span>
           <div style="width:58%;">
-            <input name="billAdd_addLine1" ng-model="shipping_address.first_name" class="addressInput" type="text" required>
+            <input name="shAdd_firstName" ng-model="shipping_address.first_name" class="addressInput" type="text" required>
           </div>
           </label>
-          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.shAdd_addLine1.$error.required">Shipping first name should not be empty.</p>
+          <p class="error" ng-class="{'alpha':addressData.enabled}" ng-show="addressConfirm.shAdd_firstName.$error.required">Shipping first name should not be empty.</p>
         </div>
 
         <label class="item item-input">
