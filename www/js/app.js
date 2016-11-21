@@ -222,7 +222,7 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
     });
 //  $urlRouterProvider.otherwise('/app/orderAddress');
     // if none of the above states are matched, use this as the fallback
-//   $urlRouterProvider.otherwise('/app/products/'+8121);
+  // $urlRouterProvider.otherwise('/app/products/'+15087);
   $urlRouterProvider.otherwise('/app/home');
   //$location.path('/app/products/'+8121);
 });

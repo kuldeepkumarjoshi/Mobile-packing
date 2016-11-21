@@ -2,9 +2,18 @@
 "use strict";
 angular.module('woocommerce-api.controllers', [])
 .controller('AppCtrl',AppCtrl)// Home Controller
-.controller('HomeCtrl', function($scope,$state,$location, $rootScope, Data, UserData, MetaData,CategoriesData,CartData) {
+.controller('HomeCtrl', function($sce,$scope,$state,$location, $rootScope, Data, UserData, MetaData,CategoriesData,CartData) {
 
     $scope.items = Data.items;
+    $scope.homeHtml = " ";
+
+    MetaData.getHomeHtml().then(function(response){
+      $scope.homeHtml = response.data;
+       $scope.homeHtml2 = $sce.trustAsHtml( $scope.homeHtml)
+    },function(){
+        console.warn("Was unable to fetch categories data from the API.");
+    });
+
 
     $scope.index = {};
 

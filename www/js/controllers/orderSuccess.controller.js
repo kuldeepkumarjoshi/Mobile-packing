@@ -37,9 +37,9 @@
                   });
                 $rootScope.$broadcast('loading:hide');
             },
-            function(response) {
+            function(response ,data,cont,extra) {
                 console.error("Error: order request could not be sent.", response);
-                BasketData.broadcast('Product order','Hi Product not available.','OK','button-positive');
+                BasketData.broadcast('Product order','Hi Please check order page and email for status of your order .','OK','button-positive');
                 emptyBasket();
                 $rootScope.$broadcast('loading:hide');
                 $ionicHistory.clearHistory();
@@ -47,7 +47,7 @@
                   disableAnimate: true,
                   disableBack: true
                 });
-                $state.go('app.home');
+                $state.go('app.orders');
 
             });
       }

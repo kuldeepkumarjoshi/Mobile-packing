@@ -768,6 +768,27 @@ angular.module('woocommerce-api.data', [])
     var data = {};
     var service = {};
 
+    service.getHomeHtml=function() {
+        var deferred = $q.defer();
+        var params = {};
+        var url = generateQuery('GET', '/custom/getHomeHtml', CONFIG, params);
+        $http({
+            method: 'GET',
+            url: url,
+            timeout: CONFIG.request_timeout
+        }).then(
+            function(result) {
+                deferred.resolve(result);
+            },
+            function(result) {
+                deferred.reject(result);
+            }
+        );
+
+        return deferred.promise;
+
+    };
+
     service.getProperties = function() {
 
         // Cache the results.
