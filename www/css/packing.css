@@ -1,11 +1,5 @@
 .title-image{
-  margin-top: 1%;
-  height: 70%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  background: url('../images/logo.png') no-repeat center center;
-  background-size: contain;
+
 }
 .badge.badge-dark{
   top: -39px;
