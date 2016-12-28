@@ -1,7 +1,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // the 2nd parameter is an array of 'requires'
 angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
-    'woocommerce-api.data', 'woocommerce-api.filters', 'woocommerce-api.directives', 'easypiechart'
+    'woocommerce-api.data', 'woocommerce-api.filters', 'woocommerce-api.directives', 'easypiechart','woocommerce-api.customService'
 ])
 
 .run(function($rootScope, $ionicPlatform, $ionicLoading, CONFIG, PAYMENT_CONFIG) {
@@ -82,7 +82,6 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
         templateUrl: "templates/menu.html",
         controller: 'AppCtrl'
     })
-
     .state('app.home', {
         url: "/home",
         views: {
@@ -92,7 +91,15 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     })
-
+    .state('app.contact', {
+        url: "/contact",
+        views: {
+            'menuContent': {
+                templateUrl: "templates/contact.html",
+                controller: 'ContactCtrl'
+            }
+        }
+    })
     .state('app.products', {
         url: "/products",
         views: {
@@ -220,9 +227,9 @@ angular.module('woocommerce-api', ['ionic', 'woocommerce-api.controllers',
             }
         }
     });
-//  $urlRouterProvider.otherwise('/app/orderAddress');
+//      $urlRouterProvider.otherwise('/app/contact');
     // if none of the above states are matched, use this as the fallback
   // $urlRouterProvider.otherwise('/app/products/'+15087);
-  $urlRouterProvider.otherwise('/app/home');
+   $urlRouterProvider.otherwise('/app/home');
   //$location.path('/app/products/'+8121);
 });

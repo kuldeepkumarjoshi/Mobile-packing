@@ -47,7 +47,11 @@ angular.module('woocommerce-api.data', [])
        title: 'Cart',
        icon: 'ion-ios-cart-outline',
        url: '#/app/basket'
-   },
+   }, {
+      title: 'Contact',
+      icon: 'ion-ios-email',
+      url: '#/app/contact'
+  },
     //  {
     //     title: 'Categories (Cards)',
     //     icon: 'ion-bag',

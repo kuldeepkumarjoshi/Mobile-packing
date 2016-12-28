@@ -1,0 +1,116 @@
+<ion-view title ='Packnation'>
+
+<style>
+
+p{
+      margin-left: 5%;
+}
+
+</style>
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <a class="button button-clear" href="#/app/basket"><i class="icon ion-ios-cart"></i><span  class="badge badge-dark">{{cartItems}}</span></a>
+    </ion-nav-buttons>
+
+		<ion-header-bar  class="row bar-subheader bar-positive" >
+			<div class="title" >
+				 Contact Us
+			</div>
+    </ion-header-bar>
+    <ion-content class="has-header padding" style="    padding-top:24px;">
+		<div class="list">
+			<form name="contactForm" novalidate>
+				<div class="item item-divider" >
+				LEAVE A MESSAGE!
+				</div>
+
+        <div class="item itemRequired">
+          <label class="item-input">
+          <span class="input-label"><sup>*</sup>Name:</span>
+          <div style="width:58%;">
+                <input name="contactName" ng-model="contact.contactName" class="addressInput" type="text" required>
+            </div>
+          </label>
+          <p class="error" ng-class="{'alpha':contactData.enabled}" ng-show="contactForm.contactName.$error.required"> Contact name should not be empty.</p>
+        </div>
+
+        <div class="item itemRequired">
+          <label class="item-input">
+          <span class="input-label">Email:</span>
+          <div style="width:58%;">
+            <input name="email" ng-model="contact.email" class="addressInput" type="email">
+          </div>
+          </label>
+          <p class="error" ng-class="{'alpha':contactData.enabled}" ng-show="contactForm.email.$error.email"> That is not a valid Email. Please enter a valid Email.</p>
+        </div>
+
+
+        <div class="item itemRequired">
+          <label class="item-input">
+          <span class="input-label"><sup>*</sup>Mobile:</span>
+          <div style="width:58%;">
+            <input name="mobile" ng-model="contact.mobile" class="addressInput" type="text" required>
+          </div>
+          </label>
+          <p class="error" ng-class="{'alpha':contactData.enabled}" ng-show="contactForm.mobile.$error.required"> Contact mobile should not be empty.</p>
+      </div>
+
+      <div class="item itemRequired">
+        <label class="item-input">
+        <span class="input-label">Message:</span>
+        <div style="width:58%;">
+            <textarea name="message" ng-model="contact.message" class="addressInput" style="height:40px;" ></textarea>
+        </div>
+        </label>
+      </div>
+
+
+      <div class="item itemRequired">
+        <label class="item-input">
+        <div style="width:58%;margin:auto;">
+          <button type="submit" class='button button-small button-positive col' style="font-size:17px;" ng-click="createMessage()" ng-disabled="contactForm.$invalid">
+              <i class="icon ion-ios-email" style="vertical-align: baseline;"></i> Send message
+          </button>
+        </div>
+        </label>
+      </div>
+			</form>
+
+		</div>
+
+		<div class="list">
+
+			<div class="item item-divider">
+		        You can reach us at
+			</div>
+
+			<label class="item item-input">
+        <div class="row">
+          	<span class="input-label col col-33">{{packnationContact[4]}}</span>
+            <div style=" display:inline-block;">
+
+                 <div    style="white-space: normal;">{{packnationContact[8]}}</div>
+            </div>
+        </div>
+			</label>
+
+			<label class="item item-input">
+        <div class="row">
+    			<span class="input-label col col-33">{{packnationContact[14]}}</span>
+    			{{packnationContact[18]}}
+        </div>
+			</label>
+
+			<label class="item item-input">
+          <div class="row">
+      			<span class="input-label col col-33">{{packnationContact[24]}}</span>
+      			{{packnationContact[28]}}
+          </div>
+			</label>
+		</div>
+
+    </ion-content>
+
+</ion-view>
