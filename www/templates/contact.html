@@ -60,22 +60,23 @@ p{
       <div class="item itemRequired">
         <label class="item-input">
         <span class="input-label">Message:</span>
-        <div style="width:58%;">
-            <textarea name="message" ng-model="contact.message" class="addressInput" style="height:40px;" ></textarea>
-        </div>
+
+
         </label>
-      </div>
-
-
-      <div class="item itemRequired">
         <label class="item-input">
-        <div style="width:100%;margin:auto;">
-          <button type="submit" class='button button-small button-positive col' style="font-size:17px;" ng-click="createMessage()" ng-disabled="contactForm.$invalid">
-              <i class="icon ion-ios-email" style="vertical-align: baseline;"></i> Send
-          </button>
-        </div>
-        </label>
+          <div style="width:93%;">
+          <textarea name="message" ng-model="contact.message" class="addressInput" style="height:100px;" ></textarea>
+          </div>
+          </label>
       </div>
+
+
+        <div class="item item-divider">
+            <button type="submit" class='button button-block button-positive'
+            style="font-size:17px;" ng-click="createMessage()" ng-disabled="contactForm.$invalid">
+                <i class="icon ion-ios-email" style="vertical-align: baseline;"></i> Send
+            </button>
+        </div>
 			</form>
 
 		</div>
@@ -103,7 +104,7 @@ p{
         </div>
 			</label>
 
-			<label class="item item-input">
+			<label class="item item-input" style="margin-bottom: 8%;">
           <div class="row">
       			<span class="input-label col col-33">{{packnationContact[24]}}</span>
       			{{packnationContact[28]}}

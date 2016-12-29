@@ -1,15 +1,15 @@
 .title-image{
 
 }
-.badge .badge-dark{
-  top: -42px;
-  left: 5px;;
-  background-color: #ff5555;
+.badge.badge-dark{
+  top: -39px ;
+  left: 3px ;
+  background-color: #ff5555 ;
 }
 .ion-ios-cart{
     content: url('../images/cartIcon.png') !important;
-    margin-left: -15%;
-    margin-top: 13%;
+    margin-left: -92%;
+    margin-top: 9%;
 }
 .arrow_back_custom{
     content: url('../images/backIcon.png') !important;

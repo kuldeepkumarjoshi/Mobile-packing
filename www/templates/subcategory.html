@@ -8,7 +8,7 @@
     <ion-header-bar class="bar-subheader bar-positive" ng-show="categories.count" ng-click="moveToProduct(categories)">
             <h1 class="title">{{categories.name}}</h1>
     </ion-header-bar>
-    <ion-content class="has-header has-footer padding">
+    <ion-content class="has-header  padding">
 <!-- child only --><div  ng-if="categories.count > 1"   >
 
           <div class="row" ng-repeat="row in categories.children | partition:2"  >
