@@ -60,7 +60,7 @@
                 amount: $scope.totalPrice*100,
                 name: "Packnation",
                 prefill: {email: customer.email, contact: BasketData.billing_address.phone, name:customer.username},
-                theme: {color: '#F37254'}
+                theme: {color: '#27276b'}
             }
             var successCallback = function(payment_id) {
                 console.log('payment_id: ' + payment_id);

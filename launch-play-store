@@ -1,0 +1,28 @@
+Commands for creating a release build on android:
+
+
+cordova build android --release    (To create a release version of the application)
+
+cmd of apk folder ( cd Mobile-packing\platforms\android\build\outputs\apk )::
+keytool -genkey -v -keystore packnation.keystore -alias packnation -keyalg RSA -keysize 2048 -validity 10000
+ (To generate the keystore to sign the app. Use a single keystore for all versions)
+
+cmd of apk folder::
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore packnation.keystore android-release-unsigned.apk packnation
+ (To sign the application with the give keystore. Here the keystore file is metacampus.keystore. Ruin this command in ant-build folder where
+ release apk is present.)
+
+Password for keystore file (packnation.keystore): pack#123
+
+
+zipalign -v 4 android-release-unsigned.apk Packnation.apk
+if zipalign not found check your environment variable for %ANDROID_HOME%tools
+
+Note: Change the application version code in AndroidManifest.xml file before building for production.
+
+first and last name: packnation
+organisational unit name: packnation
+organisational name: packnation
+city: jaipur
+state: rajasthan
+country code: in
